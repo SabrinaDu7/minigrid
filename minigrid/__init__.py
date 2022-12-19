@@ -1072,5 +1072,21 @@ def register_minigrid_envs():
         entry_point="minigrid.envs.babyai:BossLevelNoUnlock",
     )
 
+    register(
+        id='MiniGrid-LRoom-16x16-v0',
+        entry_point='minigrid.envs:LEnv_16'
+    )
+
+    register(
+        id='MiniGrid-LRoom-20x20-v0',
+        entry_point='minigrid.envs:LEnv_20'
+    )
+
+    register(
+        id='MiniGrid-LRoom-18x18-v0',
+        entry_point='minigrid.envs:LEnv_18'
+    )
+
 
 __version__ = "2.1.0"
+register_minigrid_envs()

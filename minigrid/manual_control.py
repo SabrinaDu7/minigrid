@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--env", help="gym environment to load", default="MiniGrid-MultiRoom-N6-v0"
+        "--env", help="gym environment to load", default="minigrid:MiniGrid-LRoom-16x16-v0"
     )
     parser.add_argument(
         "--seed",
@@ -100,7 +100,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--agent-view",
-        default=False,
+        default=True,
         help="draw the agent sees (partially observable view)",
         action="store_true",
     )

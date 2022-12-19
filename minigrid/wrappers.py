@@ -216,6 +216,76 @@ class RGBImgPartialObsWrapper(ObservationWrapper):
         return {**obs, "image": rgb_img_partial}
 
 
+# class RGBImgPartialObsWrapper(ObservationWrapper):
+#     """
+#     Wrapper to use partially observable RGB image as observation.
+#     This can be used to have the agent to solve the gridworld in pixel space.
+#     """
+
+#     def __init__(self, env, tile_size=8):
+#         super().__init__(env)
+
+#         self.tile_size = tile_size
+
+#         obs_shape = env.observation_space['image'].shape
+#         self.observation_space.spaces['image'] = spaces.Box(
+#             low=0,
+#             high=255,
+#             shape=(obs_shape[0] * tile_size, obs_shape[1] * tile_size, 3),
+#             dtype='uint8'
+#         )
+
+#     def observation(self, obs):
+#         env = self.unwrapped
+
+#         rgb_img_partial = env.get_obs_render(
+#             obs['image'],
+#             tile_size=self.tile_size
+#         )
+
+#         return {
+#             'mission': obs['mission'],
+#             'image': rgb_img_partial
+#         }
+    
+    
+class RGBImgPartialObsWrapper_HD(ObservationWrapper):
+    """
+    Wrapper to use partially observable RGB image as observation.
+    This can be used to have the agent to solve the gridworld in pixel space.
+    Including direction information (HD)
+    """
+
+    def __init__(self, env, tile_size=8):
+        super().__init__(env)
+
+        self.tile_size = tile_size
+
+        obs_shape = env.observation_space['image'].shape
+        self.observation_space.spaces['image'] = spaces.Box(
+            low=0,
+            high=255,
+            shape=(obs_shape[0] * tile_size, obs_shape[1] * tile_size, 3),
+            dtype='uint8'
+        )
+        self.observation_space.spaces['direction'] = spaces.Discrete(4)
+
+            
+    def observation(self, obs):
+        env = self.unwrapped
+
+        rgb_img_partial = env.get_obs_render(
+            obs['image'],
+            tile_size=self.tile_size
+        )
+
+        return {
+            'mission': obs['mission'],
+            'image': rgb_img_partial,
+            'direction': obs['direction']
+        }
+
+
 class FullyObsWrapper(ObservationWrapper):
     """
     Fully observable gridworld using a compact grid encoding
