@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from minigrid.core.grid import Grid
 from minigrid.core.mission import MissionSpace
-from minigrid.core.world_object import Goal
+from minigrid.core.world_object import Goal, Floor
 from minigrid.minigrid_env import MiniGridEnv
 
 
@@ -57,9 +57,11 @@ class FourRoomsEnv(MiniGridEnv):
 
     """
 
-    def __init__(self, agent_pos=None, goal_pos=None, max_steps=100, **kwargs):
+    def __init__(self, agent_pos=None, goal_pos=None, max_steps=100, door_poss=None, room_marks=False, **kwargs):
         self._agent_default_pos = agent_pos
         self._goal_default_pos = goal_pos
+        self._door_default_poss = door_poss
+        self.room_marks = room_marks
 
         self.size = 19
         mission_space = MissionSpace(mission_func=self._gen_mission)
@@ -86,6 +88,12 @@ class FourRoomsEnv(MiniGridEnv):
         self.grid.vert_wall(0, 0)
         self.grid.vert_wall(width - 1, 0)
 
+        # Mark the rooms wtih colored tiles
+        if self.room_marks:
+            self.put_obj(Floor('blue'), 4, 16)
+            self.put_obj(Floor('red'), 13, 13)
+            self.put_obj(Floor('yellow'), 11, 6)
+
         room_w = width // 2
         room_h = height // 2
 
@@ -99,16 +107,26 @@ class FourRoomsEnv(MiniGridEnv):
                 xR = xL + room_w
                 yB = yT + room_h
 
-                # Bottom wall and door
+                # Vertical wall and door
                 if i + 1 < 2:
                     self.grid.vert_wall(xR, yT, room_h)
-                    pos = (xR, self._rand_int(yT + 1, yB))
+
+                    if self._door_default_poss:
+                        pos = (xR, yT + 1 + self._door_default_poss[j])
+                    else:
+                        pos = (xR, self._rand_int(yT + 1, yB))
+                        
                     self.grid.set(*pos, None)
 
-                # Bottom wall and door
+                # Horizontal wall and door
                 if j + 1 < 2:
                     self.grid.horz_wall(xL, yB, room_w)
-                    pos = (self._rand_int(xL + 1, xR), yB)
+
+                    if self._door_default_poss:
+                        pos = (xL +1 + self._door_default_poss[i+2], yB)
+                    else:
+                        pos = (self._rand_int(xL + 1, xR), yB)
+
                     self.grid.set(*pos, None)
 
         # Randomize the player start position and orientation
