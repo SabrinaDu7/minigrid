@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from minigrid.core.grid import Grid
 from minigrid.core.mission import MissionSpace
-from minigrid.core.world_object import Goal, Floor
+from minigrid.core.world_object import Goal, Goal_invisible, Floor
 from minigrid.minigrid_env import MiniGridEnv
+import numpy as np
 
 
 class FourRoomsEnv(MiniGridEnv):
@@ -57,11 +58,12 @@ class FourRoomsEnv(MiniGridEnv):
 
     """
 
-    def __init__(self, agent_pos=None, goal_pos=None, max_steps=100, door_poss=None, room_marks=False, **kwargs):
+    def __init__(self, agent_pos=None, goal_pos=None, max_steps=100, door_poss=None, room_marks=False, visible=True, **kwargs):
         self._agent_default_pos = agent_pos
         self._goal_default_pos = goal_pos
         self._door_default_poss = door_poss
         self.room_marks = room_marks
+        self.vis = visible
 
         self.size = 19
         mission_space = MissionSpace(mission_func=self._gen_mission)
@@ -88,14 +90,22 @@ class FourRoomsEnv(MiniGridEnv):
         self.grid.vert_wall(0, 0)
         self.grid.vert_wall(width - 1, 0)
 
-        # Mark the rooms wtih colored tiles
-        if self.room_marks:
-            self.put_obj(Floor('blue'), 4, 16)
-            self.put_obj(Floor('red'), 13, 13)
-            self.put_obj(Floor('yellow'), 11, 6)
 
         room_w = width // 2
         room_h = height // 2
+
+
+        # Mark the rooms wtih colored tiles
+        if self.room_marks:
+            room1 = (1,1)
+            room2 = (1,room_h+1)
+            room3 = (room_w+1,1)
+            room4 = (room_w+1,room_h+1)
+            self.place_shape('horiz',   room1,'red')
+            self.place_shape('vert',    room4,'red')
+            self.place_shape('fwdslash',room3,'red')
+            self.place_shape('bckslash',room2,'red')
+
 
         # For each row of rooms
         for j in range(0, 2):
@@ -139,8 +149,59 @@ class FourRoomsEnv(MiniGridEnv):
             self.place_agent()
 
         if self._goal_default_pos is not None:
-            goal = Goal()
+            if self.vis:
+                goal = Goal()
+            else:
+                goal = Goal_invisible()
             self.put_obj(goal, *self._goal_default_pos)
             goal.init_pos, goal.cur_pos = self._goal_default_pos
         else:
             self.place_obj(Goal())
+
+    def place_shape(self,shape,pos,color):
+        """
+        Place a 8x8 shape with lower left corner at (x,y)
+        """
+        shapegrid={
+            'vert':np.array(
+                [[1,0,1,0,1,0,1,0],
+                 [1,0,1,0,1,0,1,0],
+                 [0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0],
+                 [0,0,0,0,0,0,0,0],
+                 [1,0,1,0,1,0,1,0],
+                 [1,0,1,0,1,0,1,0]]),
+            'horiz':np.array(
+                [[0,0,1,1,1,1,0,0],
+                 [0,0,0,0,0,0,0,0],
+                 [0,0,1,1,1,1,0,0],
+                 [0,0,0,0,0,0,0,0],
+                 [0,0,1,1,1,1,0,0],
+                 [0,0,0,0,0,0,0,0],
+                 [0,0,1,1,1,1,0,0],
+                 [0,0,0,0,0,0,0,0]]),
+            'fwdslash':np.array(
+                [[1,0,0,0,1,0,0,0],
+                 [0,1,0,1,0,0,0,1],
+                 [0,0,1,0,0,0,1,0],
+                 [0,1,0,1,0,1,0,0],
+                 [1,0,0,0,1,0,0,0],
+                 [0,0,0,1,0,1,0,1],
+                 [0,0,1,0,0,0,1,0],
+                 [0,1,0,0,0,1,0,1]]),
+            'bckslash':np.array(
+                [[0,0,0,1,0,0,0,1],
+                 [1,0,0,0,1,0,0,0],
+                 [0,1,0,0,0,1,0,0],
+                 [0,0,1,0,0,0,1,0],
+                 [0,0,0,1,0,0,0,1],
+                 [1,0,0,0,1,0,0,0],
+                 [0,1,0,0,0,1,0,0],
+                 [0,0,1,0,0,0,1,0]])
+            }
+            
+        shapecoords = np.transpose(np.nonzero(shapegrid[shape]))+np.array(pos,dtype='int32')
+
+        for coord in shapecoords:
+            self.put_obj(Floor(color), coord[0], coord[1])

@@ -215,7 +215,13 @@ def register_minigrid_envs():
     register(
         id="MiniGrid-FourRooms-Fixed-v0",
         entry_point="minigrid.envs:FourRoomsEnv",
-        kwargs={"goal_pos": (3,4), "door_poss": (2,3,4,5), "room_marks": True},
+        kwargs={"goal_pos": (3,4), "door_poss": (4,3,4,3), "room_marks": True},
+    )
+
+    register(
+        id="MiniGrid-FourRooms-Invisible-v0",
+        entry_point="minigrid.envs:FourRoomsEnv",
+        kwargs={"goal_pos": (3,4), "door_poss": (4,3,4,3), "room_marks": True, 'visible': False},
     )
 
 
