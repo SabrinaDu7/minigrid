@@ -117,6 +117,17 @@ class Goal(WorldObj):
     def render(self, img):
         fill_coords(img, point_in_rect(0, 1, 0, 1), COLORS[self.color])
 
+        
+class Goal_invisible(WorldObj):
+    def __init__(self):
+        super().__init__("goal", "grey")
+
+    def can_overlap(self):
+        return True
+
+    def render(self, img):
+        pass
+
 
 class Floor(WorldObj):
     """
