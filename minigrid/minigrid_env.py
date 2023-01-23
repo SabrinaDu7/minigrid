@@ -546,7 +546,7 @@ class MiniGridEnv(gym.Env):
         elif action == self.actions.forward:
             if fwd_cell is None or fwd_cell.can_overlap():
                 self.agent_pos = tuple(fwd_pos)
-            if fwd_cell is not None and fwd_cell.type == "goal":
+            if fwd_cell is not None and (fwd_cell.type == "goal" or fwd_cell.type == "fake_lava"):
                 terminated = True
                 reward = self._reward()
             if fwd_cell is not None and fwd_cell.type == "lava":
