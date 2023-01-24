@@ -4,7 +4,7 @@ import numpy as np
 
 from minigrid.core.grid import Grid
 from minigrid.core.mission import MissionSpace
-from minigrid.core.world_object import Goal, Lava, Fake_Lava, Floor
+from minigrid.core.world_object import Gates, Lava, Fake_Lava, Floor
 from minigrid.minigrid_env import MiniGridEnv
 from minigrid.core.constants import PATTERNS, IDX_TO_COLOR
 
@@ -15,6 +15,16 @@ patterns = [
     'square',
     'triangle'
 ]
+
+def reject_nonmarked_rooms(env: MiniGridEnv, pos: tuple[int, int]):
+    """
+    Function to filter out object positions that are not in the unique rooms
+    """
+    x, y = pos
+    marked = x <= env.roomsize or y <= env.roomsize or x>= (env.width - env.roomsize - 1) or y >= (env.height - env.roomsize - 1)
+    print (pos)
+    print (marked)
+    return (not marked)
 
 
 class FakeLavaEnv(MiniGridEnv):
@@ -76,7 +86,7 @@ class FakeLavaEnv(MiniGridEnv):
     """
 
     def __init__(
-        self, roomsize=5, roomsv=3, roomsh=4, lava=2, seed=42, max_steps: int | None = None, **kwargs
+        self, roomsize=5, roomsv=3, roomsh=4, lava=4, seed=42, max_steps: int | None = None, **kwargs
     ):
         self.roomsize = roomsize
         self.halfsize = int(roomsize/2) + (roomsize%2 > 0)
@@ -91,7 +101,7 @@ class FakeLavaEnv(MiniGridEnv):
         mission_space = MissionSpace(mission_func=self._gen_mission)
 
         if max_steps is None:
-            max_steps = 4 * roomsh * roomsv * roomsize
+            max_steps = roomsh * roomsv * roomsize
 
         super().__init__(
             mission_space=mission_space,
@@ -123,12 +133,18 @@ class FakeLavaEnv(MiniGridEnv):
 
         # Generate gates
         for i in range(self.roomsh-1):
-            self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize-1, None)
+            self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize-1, Gates())
             for j in range(self.roomsv-1):
-                self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize, None)
-                self.grid.set((i+1)*(self.roomsize+1)-self.halfsize, (j+1)*(self.roomsize+1), None)
+                self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize, Gates())
+                self.grid.set((i+1)*(self.roomsize+1)-self.halfsize, (j+1)*(self.roomsize+1), Gates())
         for j in range(self.roomsv-1):
-            self.grid.set(width-self.halfsize-1, (j+1)*(self.roomsize+1), None)
+            self.grid.set(width-self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
+
+        # Place agent
+        self.agent_pos = (-1, -1)
+        pos = self.place_obj(None, reject_fn=reject_nonmarked_rooms)
+        self.agent_pos = pos
+        self.agent_dir = self._rand_int(0, 4)
 
         # Generate marks
         n=0
@@ -159,7 +175,7 @@ class FakeLavaEnv(MiniGridEnv):
                     
 
         # Place the agent in the top-left corner
-        self.place_agent()
+        # self.place_agent()
 
         self.mission = (
             "avoid the real lava and get to the fake lava square"

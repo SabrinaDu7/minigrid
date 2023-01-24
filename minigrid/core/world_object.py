@@ -203,6 +203,28 @@ class Wall(WorldObj):
         fill_coords(img, point_in_rect(0, 1, 0, 1), COLORS[self.color])
 
 
+class Gates(WorldObj):
+    def __init__(self, color: str = "blue"):
+        super().__init__("door", color)
+
+    def see_behind(self):
+        return False
+
+    def can_overlap(self):
+        return True
+
+    def render(self, img):
+        c = COLORS[self.color]
+
+        fill_coords(img, point_in_rect(0.00, 1.00, 0.00, 1.00), c)
+        fill_coords(img, point_in_rect(0.04, 0.96, 0.04, 0.96), (0, 0, 0))
+        fill_coords(img, point_in_rect(0.08, 0.92, 0.08, 0.92), c)
+        fill_coords(img, point_in_rect(0.12, 0.88, 0.12, 0.88), (0, 0, 0))
+
+        # Draw door handle
+        fill_coords(img, point_in_circle(cx=0.75, cy=0.50, r=0.08), c)
+
+
 class Door(WorldObj):
     def __init__(self, color: str, is_open: bool = False, is_locked: bool = False):
         super().__init__("door", color)

@@ -196,6 +196,30 @@ def register_minigrid_envs():
         kwargs={"roomsize": 5, "roomsv": 3},
     )
 
+    register(
+        id="MiniGrid-FakeLava-7x7-3x4-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 7, "roomsv": 3},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-9x9-3x4-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 9, "roomsv": 3},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-7x7-4x4-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 7, "roomsv": 4},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-9x9-4x4-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 9, "roomsv": 4},
+    )
+
     # Fetch
     # ----------------------------------------
 
