@@ -197,9 +197,21 @@ def register_minigrid_envs():
     )
 
     register(
+        id="MiniGrid-FakeLava-Target-5x5-3x4-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 5, 'target_start': True, "max_steps": 200},
+    )
+
+    register(
         id="MiniGrid-FakeLava-7x7-3x4-v0",
         entry_point="minigrid.envs:FakeLavaEnv",
         kwargs={"roomsize": 7, "max_steps": 250},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-Target-7x7-3x4-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 7, 'target_start': True, "max_steps": 250},
     )
 
     register(
@@ -209,15 +221,45 @@ def register_minigrid_envs():
     )
 
     register(
+        id="MiniGrid-FakeLava-Target-9x9-3x4-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 9, 'target_start': True, "max_steps": 300},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-5x5-4x4-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 5, 'roomsv': 4, "max_steps": 250},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-Target-5x5-4x4-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 5, 'roomsv': 4, 'target_start': True, "max_steps": 250},
+    )
+
+    register(
         id="MiniGrid-FakeLava-7x7-4x4-v0",
         entry_point="minigrid.envs:FakeLavaEnv",
-        kwargs={"roomsize": 7, "max_steps": 300},
+        kwargs={"roomsize": 7, 'roomsv': 4, "max_steps": 300},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-Target-7x7-4x4-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 7, 'roomsv': 4, 'target_start': True, "max_steps": 300},
     )
 
     register(
         id="MiniGrid-FakeLava-9x9-4x4-v0",
         entry_point="minigrid.envs:FakeLavaEnv",
-        kwargs={"roomsize": 9, "max_steps": 400},
+        kwargs={"roomsize": 9, 'roomsv': 4, "max_steps": 400},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-Target-9x9-4x4-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 9, 'roomsv': 4, 'target_start': True, "max_steps": 400},
     )
 
     # Fetch
@@ -1134,5 +1176,5 @@ def register_minigrid_envs():
     )
 
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 register_minigrid_envs()

@@ -22,9 +22,19 @@ def reject_nonmarked_rooms(env: MiniGridEnv, pos: tuple[int, int]):
     """
     x, y = pos
     marked = x <= env.roomsize or y <= env.roomsize or x>= (env.width - env.roomsize - 1) or y >= (env.height - env.roomsize - 1)
-    print (pos)
-    print (marked)
     return (not marked)
+
+
+def reject_nontarget_rooms(env: MiniGridEnv, pos: tuple[int, int]):
+    """
+    Function to filter out object positions that are not in the unique rooms
+    """
+    x, y = pos
+    xt, yt = env.goalpos
+    target = x <= (xt + env.halfsize) and y <= (yt + env.halfsize) and x >= (xt - env.halfsize) and y >= (yt - env.halfsize)
+    print (pos)
+    print (target)
+    return (not target)
 
 
 class FakeLavaEnv(MiniGridEnv):
@@ -86,13 +96,14 @@ class FakeLavaEnv(MiniGridEnv):
     """
 
     def __init__(
-        self, roomsize=5, roomsv=3, roomsh=4, lava=4, seed=42, max_steps: int | None = None, **kwargs
+        self, roomsize=5, roomsv=3, roomsh=4, nlava=None, target_start=False, seed=42, max_steps: int | None = None, **kwargs
     ):
         self.roomsize = roomsize
         self.halfsize = int(roomsize/2) + (roomsize%2 > 0)
         self.roomsv = roomsv
         self.roomsh = roomsh
-        self.lava = lava
+        self.nlava = nlava
+        self.targetstart = target_start
 
         np.random.seed(seed)
         self.marks = np.arange(25)
@@ -118,7 +129,7 @@ class FakeLavaEnv(MiniGridEnv):
         return "avoid the real lava and get to the fake lava square"
 
     def _gen_grid(self, width, height):
-        assert width >= 5 and height >= 5
+        assert width >= 17 and height >= 13
 
         # Create an empty grid
         self.grid = Grid(width, height)
@@ -142,22 +153,30 @@ class FakeLavaEnv(MiniGridEnv):
 
         # Place lava
         if self.roomsv<5:
-            goal_put = False
+            self.goalpos = None
             for i in range(self.roomsh):
                 for j in range(self.roomsv):
                     if i!=0 and i!=self.roomsh-1 and j!=0 and j!=self.roomsv-1:
-                        if not goal_put:
+                        pos = (i*(self.roomsize+1)+self.halfsize, j*(self.roomsize+1)+self.halfsize)
+                        if not self.goalpos:
                             obj = Fake_Lava()
-                            goal_put = True
+                            self.goalpos = pos
                         else:
                             obj = Lava()
-                        self.put_obj(obj, i*(self.roomsize+1)+self.halfsize, j*(self.roomsize+1)+self.halfsize)
+                        self.put_obj(obj, *pos)
 
         # Place the agent
-        self.agent_pos = (-1, -1)
-        pos = self.place_obj(None, reject_fn=reject_nonmarked_rooms)
-        self.agent_pos = pos
-        self.agent_dir = self._rand_int(0, 4)
+        if self.targetstart:
+            self.agent_pos = (-1, -1)
+            pos = self.place_obj(None, reject_fn=reject_nontarget_rooms)
+            self.agent_pos = pos
+            self.agent_dir = self._rand_int(0, 4)
+
+        else:
+            self.agent_pos = (-1, -1)
+            pos = self.place_obj(None, reject_fn=reject_nonmarked_rooms)
+            self.agent_pos = pos
+            self.agent_dir = self._rand_int(0, 4)
 
         # Generate marks
         n=0
