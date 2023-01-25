@@ -101,7 +101,7 @@ class FakeLavaEnv(MiniGridEnv):
         mission_space = MissionSpace(mission_func=self._gen_mission)
 
         if max_steps is None:
-            max_steps = roomsh * roomsv * roomsize
+            max_steps = 4 * roomsh * roomsv * roomsize
 
         super().__init__(
             mission_space=mission_space,
@@ -140,7 +140,20 @@ class FakeLavaEnv(MiniGridEnv):
         for j in range(self.roomsv-1):
             self.grid.set(width-self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
 
-        # Place agent
+        # Place lava
+        if self.roomsv<5:
+            goal_put = False
+            for i in range(self.roomsh):
+                for j in range(self.roomsv):
+                    if i!=0 and i!=self.roomsh-1 and j!=0 and j!=self.roomsv-1:
+                        if not goal_put:
+                            obj = Fake_Lava()
+                            goal_put = True
+                        else:
+                            obj = Lava()
+                        self.put_obj(obj, i*(self.roomsize+1)+self.halfsize, j*(self.roomsize+1)+self.halfsize)
+
+        # Place the agent
         self.agent_pos = (-1, -1)
         pos = self.place_obj(None, reject_fn=reject_nonmarked_rooms)
         self.agent_pos = pos
@@ -159,19 +172,6 @@ class FakeLavaEnv(MiniGridEnv):
                         (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
                         IDX_TO_COLOR[n_color]
                     )
-
-        # Place lava
-        if self.roomsv<5:
-            goal_put = False
-            for i in range(self.roomsh):
-                for j in range(self.roomsv):
-                    if i!=0 and i!=self.roomsh-1 and j!=0 and j!=self.roomsv-1:
-                        if not goal_put:
-                            obj = Fake_Lava()
-                            goal_put = True
-                        else:
-                            obj = Lava()
-                        self.put_obj(obj, i*(self.roomsize+1)+self.halfsize, j*(self.roomsize+1)+self.halfsize)
                     
 
         # Place the agent in the top-left corner
