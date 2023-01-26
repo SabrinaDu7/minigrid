@@ -32,8 +32,6 @@ def reject_nontarget_rooms(env: MiniGridEnv, pos: tuple[int, int]):
     x, y = pos
     xt, yt = env.goalpos
     target = x <= (xt + env.halfsize) and y <= (yt + env.halfsize) and x >= (xt - env.halfsize) and y >= (yt - env.halfsize)
-    print (pos)
-    print (target)
     return (not target)
 
 
@@ -134,22 +132,22 @@ class FakeLavaEnv(MiniGridEnv):
         # Create an empty grid
         self.grid = Grid(width, height)
 
-        # Generate the surrounding walls
-        self.grid.wall_rect(0, 0, width, height)
-
         # Generate rooms
         for i in range(self.roomsh):
             for j in range(self.roomsv):
-                self.grid.wall_rect(i*(self.roomsize+1), j*(self.roomsize+1), self.roomsize+2, self.roomsize+2)
+                self.grid.wall_rect(i*(self.roomsize+1), j*(self.roomsize+1), self.roomsize+2, self.roomsize+2, Gates)
 
-        # Generate gates
-        for i in range(self.roomsh-1):
-            self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize-1, Gates())
-            for j in range(self.roomsv-1):
-                self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize, Gates())
-                self.grid.set((i+1)*(self.roomsize+1)-self.halfsize, (j+1)*(self.roomsize+1), Gates())
-        for j in range(self.roomsv-1):
-            self.grid.set(width-self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
+        # Generate the surrounding walls
+        self.grid.wall_rect(0, 0, width, height)
+
+        # # Generate gates
+        # for i in range(self.roomsh-1):
+        #     self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize-1, Gates())
+        #     for j in range(self.roomsv-1):
+        #         self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize, Gates())
+        #         self.grid.set((i+1)*(self.roomsize+1)-self.halfsize, (j+1)*(self.roomsize+1), Gates())
+        # for j in range(self.roomsv-1):
+        #     self.grid.set(width-self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
 
         # Place lava
         if self.roomsv<5:
