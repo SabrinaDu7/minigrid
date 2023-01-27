@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+from gymnasium import spaces
 
 from minigrid.core.grid import Grid
 from minigrid.core.mission import MissionSpace
@@ -59,9 +60,6 @@ class FakeLavaEnv(MiniGridEnv):
     | 1   | right        | Turn right   |
     | 2   | forward      | Move forward |
     | 3   | pickup       | Unused       |
-    | 4   | drop         | Unused       |
-    | 5   | toggle       | Unused       |
-    | 6   | done         | Unused       |
 
     ## Observation Encoding
 
@@ -103,6 +101,7 @@ class FakeLavaEnv(MiniGridEnv):
         self.nlava = nlava
         self.targetstart = target_start
 
+
         np.random.seed(seed)
         self.marks = np.arange(25)
         np.random.shuffle(self.marks)
@@ -121,6 +120,9 @@ class FakeLavaEnv(MiniGridEnv):
             max_steps=max_steps,
             **kwargs,
         )
+
+        self.action_space = spaces.Discrete(4)
+
 
     @staticmethod
     def _gen_mission():
