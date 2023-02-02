@@ -137,7 +137,13 @@ class FakeLavaEnv(MiniGridEnv):
         # Generate rooms
         for i in range(self.roomsh):
             for j in range(self.roomsv):
-                self.grid.wall_rect(i*(self.roomsize+1), j*(self.roomsize+1), self.roomsize+2, self.roomsize+2, Gates)
+                self.grid.wall_rect(
+                                    i*(self.roomsize+1),
+                                    j*(self.roomsize+1),
+                                    self.roomsize+2,
+                                    self.roomsize+2,
+                                    Gates
+                                    )
 
         # Generate the surrounding walls
         self.grid.wall_rect(0, 0, width, height)
@@ -199,6 +205,59 @@ class FakeLavaEnv(MiniGridEnv):
         self.mission = (
             "avoid the real lava and get to the fake lava square"
         )
+    
+    def step(self, action):
+        
+        self.step_count += 1
+
+        reward = 0
+        terminated = False
+        truncated = False
+
+        # Get the position in front of the agent
+        fwd_pos = self.front_pos
+
+        # Get the contents of the cell in front of the agent
+        fwd_cell = self.grid.get(*fwd_pos)
+
+        # Rotate left
+        if action == self.actions.left:
+            self.agent_dir -= 1
+            if self.agent_dir < 0:
+                self.agent_dir += 4
+
+        # Rotate right
+        elif action == self.actions.right:
+            self.agent_dir = (self.agent_dir + 1) % 4
+
+        # Move forward
+        elif action == self.actions.forward:
+            if fwd_cell is None or fwd_cell.can_overlap():
+                self.agent_pos = tuple(fwd_pos)
+            if fwd_cell is not None and (fwd_cell.type == "goal" or fwd_cell.type == "fake_lava"):
+                terminated = True
+                reward = self._reward()
+            if fwd_cell is not None and fwd_cell.type == "lava":
+                reward = -1
+                terminated = True
+
+        # Pass
+        elif action == self.actions.pickup:
+            pass
+
+        else:
+            raise ValueError(f"Unknown action: {action}")
+
+        if self.step_count >= self.max_steps:
+            truncated = True
+
+        if self.render_mode == "human":
+            self.render()
+
+        obs = self.gen_obs()
+
+        return obs, reward, terminated, truncated, {}
+    
     def place_shape(self,shape,pos,color):
         """
         Place a shape with upper left corner at (x,y)
