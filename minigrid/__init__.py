@@ -203,15 +203,27 @@ def register_minigrid_envs():
     )
 
     register(
-        id="MiniGrid-FakeLava-5x5-3x4-neg06-v0",
+        id="MiniGrid-FakeLava-5x5-3x4-neg03-v0",
         entry_point="minigrid.envs:FakeLavaEnv",
-        kwargs={"roomsize": 5, 'neg': 0.6, "max_steps": 200},
+        kwargs={"roomsize": 5, 'neg': 0.3, "max_steps": 200},
     )
 
     register(
         id="MiniGrid-FakeLava-5x5-3x4-neg04-v0",
         entry_point="minigrid.envs:FakeLavaEnv",
         kwargs={"roomsize": 5, 'neg': 0.4, "max_steps": 200},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-5x5-3x4-neg035-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 5, 'neg': 0.35, "max_steps": 200},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-5x5-3x4-neg025-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 5, 'neg': 0.25, "max_steps": 200},
     )
 
     register(
@@ -233,10 +245,23 @@ def register_minigrid_envs():
     )
 
     register(
-        id="MiniGrid-FakeLava-Target-5x5-3x4-neg06-v0",
+        id="MiniGrid-FakeLava-Target-5x5-3x4-neg03-v0",
         entry_point="minigrid.envs:FakeLavaEnv",
-        kwargs={"roomsize": 5, 'neg': 0.6, 'target_start': True, "max_steps": 200},
+        kwargs={"roomsize": 5, 'neg': 0.3, 'target_start': True, "max_steps": 200},
     )
+
+    register(
+        id="MiniGrid-FakeLava-Target-5x5-3x4-neg035-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 5, 'neg': 0.35, 'target_start': True, "max_steps": 200},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-Target-5x5-3x4-neg025-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 5, 'neg': 0.25, 'target_start': True, "max_steps": 200},
+    )
+
 
     register(
         id="MiniGrid-FakeLava-7x7-3x4-v0",
@@ -1212,5 +1237,5 @@ def register_minigrid_envs():
     )
 
 
-__version__ = "1.0.6"
+__version__ = "1.0.61"
 register_minigrid_envs()
