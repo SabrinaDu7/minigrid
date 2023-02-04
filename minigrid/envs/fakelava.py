@@ -92,7 +92,15 @@ class FakeLavaEnv(MiniGridEnv):
     """
 
     def __init__(
-        self, roomsize=5, roomsv=3, roomsh=4, nlava=None, target_start=False, seed=42, max_steps: int | None = None, **kwargs
+        self, roomsize=5,
+        roomsv=3,
+        roomsh=4,
+        nlava=None,
+        target_start=False,
+        neg=0,
+        seed=42,
+        max_steps: int | None = None,
+        **kwargs
     ):
         self.roomsize = roomsize
         self.halfsize = int(roomsize/2) + (roomsize%2 > 0)
@@ -100,6 +108,7 @@ class FakeLavaEnv(MiniGridEnv):
         self.roomsh = roomsh
         self.nlava = nlava
         self.targetstart = target_start
+        self.neg = neg
 
 
         np.random.seed(seed)
@@ -238,7 +247,7 @@ class FakeLavaEnv(MiniGridEnv):
                 terminated = True
                 reward = self._reward()
             if fwd_cell is not None and fwd_cell.type == "lava":
-                reward = -1
+                reward = -self.neg #* self._reward()
                 terminated = True
 
         # Pass
