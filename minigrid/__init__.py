@@ -203,6 +203,30 @@ def register_minigrid_envs():
     )
 
     register(
+        id="MiniGrid-FakeLava-5x5-3x4-neg031-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 5, 'neg': 0.31, "max_steps": 200},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-5x5-3x4-neg032-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 5, 'neg': 0.32, "max_steps": 200},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-5x5-3x4-neg033-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 5, 'neg': 0.33, "max_steps": 200},
+    )
+
+    register(
+        id="MiniGrid-FakeLava-5x5-3x4-neg034-v0",
+        entry_point="minigrid.envs:FakeLavaEnv",
+        kwargs={"roomsize": 5, 'neg': 0.34, "max_steps": 200},
+    )
+
+    register(
         id="MiniGrid-FakeLava-5x5-3x4-neg03-v0",
         entry_point="minigrid.envs:FakeLavaEnv",
         kwargs={"roomsize": 5, 'neg': 0.3, "max_steps": 200},
@@ -1237,5 +1261,5 @@ def register_minigrid_envs():
     )
 
 
-__version__ = "1.0.61"
+__version__ = "1.0.62"
 register_minigrid_envs()
