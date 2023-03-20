@@ -173,7 +173,7 @@ class PlaceCellsObsWrapper(ObservationWrapper):
         place_cells_space = spaces.Box(
             low=0,
             high=1,
-            shape=self.units,
+            shape=(self.units,1),
             dtype="float32",
         )
 
