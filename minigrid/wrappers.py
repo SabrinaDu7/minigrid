@@ -158,6 +158,35 @@ class OneHotPartialObsWrapper(ObservationWrapper):
         return {**obs, "image": out}
 
 
+class PlaceCellsObsWrapper(ObservationWrapper):
+    """
+    Wrapper to use (fake) place cells input as observation,
+    This can be used to have the agent to solve the gridworld in cognitive map space.
+    """
+
+    def __init__(self, env, units, function):
+        super().__init__(env)
+
+        self.units = units
+        self.transform_to_place_cells = function
+
+        place_cells_space = spaces.Box(
+            low=0,
+            high=1,
+            shape=self.units,
+            dtype="float32",
+        )
+
+        self.observation_space = spaces.Dict(
+            {**self.observation_space.spaces, "place cells": place_cells_space}
+        )
+
+    def observation(self, obs):
+        cog_map = self.transform_to_place_cells(self.agent_pos)
+
+        return {**obs, "place cells": cog_map}
+
+
 class RGBImgObsWrapper(ObservationWrapper):
     """
     Wrapper to use fully observable RGB image as observation,
