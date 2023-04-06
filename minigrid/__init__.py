@@ -1309,5 +1309,5 @@ def register_minigrid_envs():
     )
 
 
-__version__ = "1.0.73"
+__version__ = "1.0.74"
 register_minigrid_envs()
