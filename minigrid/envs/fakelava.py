@@ -151,20 +151,28 @@ class FakeLavaEnv(MiniGridEnv):
                                     j*(self.roomsize+1),
                                     self.roomsize+2,
                                     self.roomsize+2,
-                                    Gates
+                                    # Gates
                                     )
 
         # Generate the surrounding walls
         self.grid.wall_rect(0, 0, width, height)
 
-        # # Generate gates
-        # for i in range(self.roomsh-1):
-        #     self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize-1, Gates())
-        #     for j in range(self.roomsv-1):
-        #         self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize, Gates())
-        #         self.grid.set((i+1)*(self.roomsize+1)-self.halfsize, (j+1)*(self.roomsize+1), Gates())
-        # for j in range(self.roomsv-1):
-        #     self.grid.set(width-self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
+        # Generate gates
+        for i in range(self.roomsh-1):
+            self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize, Gates())
+            self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize-1, Gates())
+            self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize-2, Gates())
+            for j in range(self.roomsv-1):
+                self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize-1, Gates())
+                self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize, Gates())
+                self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize+1, Gates())
+                self.grid.set((i+1)*(self.roomsize+1)-self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
+                self.grid.set((i+1)*(self.roomsize+1)-self.halfsize, (j+1)*(self.roomsize+1), Gates())
+                self.grid.set((i+1)*(self.roomsize+1)-self.halfsize+1, (j+1)*(self.roomsize+1), Gates())
+        for j in range(self.roomsv-1):
+            self.grid.set(width-self.halfsize, (j+1)*(self.roomsize+1), Gates())
+            self.grid.set(width-self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
+            self.grid.set(width-self.halfsize-2, (j+1)*(self.roomsize+1), Gates())
 
         # Place lava
         if self.roomsv<5:
@@ -249,6 +257,11 @@ class FakeLavaEnv(MiniGridEnv):
             if fwd_cell is not None and fwd_cell.type == "lava":
                 reward = -self.neg #* self._reward()
                 terminated = True
+            # Move forward again if it's a Gates
+            # if fwd_cell is Gates:
+            #     fwd_pos = self.front_pos
+            #     self.agent_pos = tuple(fwd_pos)
+
 
         # Pass
         elif action == self.actions.pickup:
