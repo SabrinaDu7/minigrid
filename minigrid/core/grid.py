@@ -83,11 +83,16 @@ class Grid:
         y: int,
         length: int | None = None,
         obj_type: Callable[[], WorldObj] = Wall,
+        variegate = np.array([0,0]),
     ):
         if length is None:
             length = self.width - x
-        for i in range(0, length):
-            self.set(x + i, y, obj_type())
+        if variegate.any():
+            for i in range(0, length):
+                self.set(x + i, y, obj_type(add=variegate[i]))
+        else:
+            for i in range(0, length):
+                self.set(x + i, y, obj_type())
 
     def vert_wall(
         self,
@@ -95,17 +100,22 @@ class Grid:
         y: int,
         length: int | None = None,
         obj_type: Callable[[], WorldObj] = Wall,
+        variegate = np.array([0,0]),
     ):
         if length is None:
             length = self.height - y
-        for j in range(0, length):
-            self.set(x, y + j, obj_type())
+        if variegate.any():
+            for j in range(0, length):
+                self.set(x, y + j, obj_type(add=variegate[j+100]))
+        else:
+            for j in range(0, length):
+                self.set(x, y + j, obj_type())
 
-    def wall_rect(self, x: int, y: int, w: int, h: int, obj_type: Callable[[], WorldObj] = Wall):
-        self.horz_wall(x, y, w, obj_type)
-        self.horz_wall(x, y + h - 1, w, obj_type)
-        self.vert_wall(x, y, h, obj_type)
-        self.vert_wall(x + w - 1, y, h, obj_type)
+    def wall_rect(self, x: int, y: int, w: int, h: int, obj_type: Callable[[], WorldObj] = Wall, variegate=np.array([0,0])):
+        self.horz_wall(x, y, w, obj_type, variegate)
+        self.horz_wall(x, y + h - 1, w, obj_type, variegate)
+        self.vert_wall(x, y, h, obj_type, variegate)
+        self.vert_wall(x + w - 1, y, h, obj_type, variegate)
 
     def rotate_left(self) -> Grid:
         """

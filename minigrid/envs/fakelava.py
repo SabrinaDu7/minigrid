@@ -5,7 +5,7 @@ from gymnasium import spaces
 
 from minigrid.core.grid import Grid
 from minigrid.core.mission import MissionSpace
-from minigrid.core.world_object import Gates, Lava, Fake_Lava, Floor
+from minigrid.core.world_object import Gates, Lava, Fake_Lava, Floor, FloorCustom, WallCustom
 from minigrid.minigrid_env import MiniGridEnv
 from minigrid.core.constants import PATTERNS, IDX_TO_COLOR
 
@@ -16,6 +16,9 @@ patterns = [
     'square',
     'triangle'
 ]
+
+gen = np.random.default_rng(seed=42)
+wall_colors = gen.choice(100, (500,3))
 
 def reject_nonmarked_rooms(env: MiniGridEnv, pos: tuple[int, int]):
     """
@@ -98,7 +101,7 @@ class FakeLavaEnv(MiniGridEnv):
         nlava=None,
         target_start=False,
         neg=0,
-        seed=42,
+        seed=8,
         max_steps: int | None = None,
         **kwargs
     ):
@@ -111,9 +114,12 @@ class FakeLavaEnv(MiniGridEnv):
         self.neg = neg
 
 
-        np.random.seed(seed)
+        randgen = np.random.default_rng(seed=seed)
         self.marks = np.arange(25)
-        np.random.shuffle(self.marks)
+        randgen.shuffle(self.marks)
+        # np.random.seed(seed)
+        # self.marks = np.arange(25)
+        # np.random.shuffle(self.marks)
 
         mission_space = MissionSpace(mission_func=self._gen_mission)
 
@@ -137,50 +143,75 @@ class FakeLavaEnv(MiniGridEnv):
     def _gen_mission():
         return "avoid the real lava and get to the fake lava square"
 
-    def _gen_grid(self, width, height):
-        assert width >= 17 and height >= 13
+    def _gen_grid(self, width, height, regenerate=True):
+        if regenerate:
+            assert width >= 17 and height >= 13
 
-        # Create an empty grid
-        self.grid = Grid(width, height)
+            # Create an empty grid
+            self.grid = Grid(width, height)
 
-        # Generate rooms
-        for i in range(self.roomsh):
-            for j in range(self.roomsv):
-                self.grid.wall_rect(
-                                    i*(self.roomsize+1),
-                                    j*(self.roomsize+1),
-                                    self.roomsize+2,
-                                    self.roomsize+2,
-                                    # Gates
-                                    )
+            # Generate rooms
+            for i in range(self.roomsh-2):
+                for j in range(self.roomsv-2):
+                    self.grid.wall_rect(
+                                        (i+1)*(self.roomsize+1),
+                                        (j+1)*(self.roomsize+1),
+                                        self.roomsize+2,
+                                        self.roomsize+2,
+                                        # Gates
+                                        )
+            # for i in range(self.roomsh):
+            #     for j in range(self.roomsv):
+            #         self.grid.wall_rect(
+            #                             i*(self.roomsize+1),
+            #                             j*(self.roomsize+1),
+            #                             self.roomsize+2,
+            #                             self.roomsize+2,
+            #                             # Gates
+            #                             )
 
-        # Generate the surrounding walls
-        self.grid.wall_rect(0, 0, width, height)
+            # Generate the surrounding walls
+            # self.grid.wall_rect(0, 0, width, height, WallCustom, wall_colors)
+            self.grid.wall_rect(0, 0, width, height)
+            self.grid.set(1,1,WallCustom(add=wall_colors[1]))
 
-        # Generate gates
-        for i in range(self.roomsh-1):
-            self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize, Gates())
-            self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize-1, Gates())
-            self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize-2, Gates())
-            for j in range(self.roomsv-1):
-                self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize-1, Gates())
-                self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize, Gates())
-                self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize+1, Gates())
-                self.grid.set((i+1)*(self.roomsize+1)-self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
-                self.grid.set((i+1)*(self.roomsize+1)-self.halfsize, (j+1)*(self.roomsize+1), Gates())
-                self.grid.set((i+1)*(self.roomsize+1)-self.halfsize+1, (j+1)*(self.roomsize+1), Gates())
-        for j in range(self.roomsv-1):
-            self.grid.set(width-self.halfsize, (j+1)*(self.roomsize+1), Gates())
-            self.grid.set(width-self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
-            self.grid.set(width-self.halfsize-2, (j+1)*(self.roomsize+1), Gates())
+            # Generate gates
+            for i in range(self.roomsh-2):
+                for j in range(self.roomsv-2):
+                    self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize-1, Gates())
+                    self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize, Gates())
+                    self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize+1, Gates())
+                    self.grid.set((i+2)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize-1, Gates())
+                    self.grid.set((i+2)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize, Gates())
+                    self.grid.set((i+2)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize+1, Gates())
+                    self.grid.set((i+1)*(self.roomsize+1)+self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
+                    self.grid.set((i+1)*(self.roomsize+1)+self.halfsize, (j+1)*(self.roomsize+1), Gates())
+                    self.grid.set((i+1)*(self.roomsize+1)+self.halfsize+1, (j+1)*(self.roomsize+1), Gates())
+                    self.grid.set((i+1)*(self.roomsize+1)+self.halfsize-1, (j+2)*(self.roomsize+1), Gates())
+                    self.grid.set((i+1)*(self.roomsize+1)+self.halfsize, (j+2)*(self.roomsize+1), Gates())
+                    self.grid.set((i+1)*(self.roomsize+1)+self.halfsize+1, (j+2)*(self.roomsize+1), Gates())
+            # for i in range(self.roomsh-1):
+            #     self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize, Gates())
+            #     self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize-1, Gates())
+            #     self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize-2, Gates())
+            #     for j in range(self.roomsv-1):
+            #         self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize-1, Gates())
+            #         self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize, Gates())
+            #         self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)-self.halfsize+1, Gates())
+            #         self.grid.set((i+1)*(self.roomsize+1)-self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
+            #         self.grid.set((i+1)*(self.roomsize+1)-self.halfsize, (j+1)*(self.roomsize+1), Gates())
+            #         self.grid.set((i+1)*(self.roomsize+1)-self.halfsize+1, (j+1)*(self.roomsize+1), Gates())
+            # for j in range(self.roomsv-1):
+            #     self.grid.set(width-self.halfsize, (j+1)*(self.roomsize+1), Gates())
+            #     self.grid.set(width-self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
+            #     self.grid.set(width-self.halfsize-2, (j+1)*(self.roomsize+1), Gates())
 
-        # Place lava
-        if self.roomsv<5:
-            self.goalpos = None
-            for i in range(self.roomsh):
-                for j in range(self.roomsv):
-                    if i!=0 and i!=self.roomsh-1 and j!=0 and j!=self.roomsv-1:
-                        pos = (i*(self.roomsize+1)+self.halfsize, j*(self.roomsize+1)+self.halfsize)
+            # Place lava
+            if self.roomsv<5:
+                self.goalpos = None
+                for i in range(self.roomsh-2):
+                    for j in range(self.roomsv-2):
+                        pos = ((i+1)*(self.roomsize+1)+self.halfsize, (j+1)*(self.roomsize+1)+self.halfsize)
                         if not self.goalpos:
                             obj = Fake_Lava()
                             self.goalpos = pos
@@ -188,40 +219,91 @@ class FakeLavaEnv(MiniGridEnv):
                             obj = Lava()
                         self.put_obj(obj, *pos)
 
-        # Place the agent
-        if self.targetstart:
-            self.agent_pos = (-1, -1)
-            pos = self.place_obj(None, reject_fn=reject_nontarget_rooms)
-            self.agent_pos = pos
-            self.agent_dir = self._rand_int(0, 4)
+            # Place the agent
+            if self.targetstart:
+                self.agent_pos = (-1, -1)
+                pos = self.place_obj(None, reject_fn=reject_nontarget_rooms)
+                self.agent_pos = pos
+                self.agent_dir = self._rand_int(0, 4)
 
-        else:
-            self.agent_pos = (-1, -1)
-            pos = self.place_obj(None, reject_fn=reject_nonmarked_rooms)
-            self.agent_pos = pos
-            self.agent_dir = self._rand_int(0, 4)
+            else:
+                self.agent_pos = (-1, -1)
+                pos = self.place_obj(None, reject_fn=reject_nonmarked_rooms)
+                self.agent_pos = pos
+                self.agent_dir = self._rand_int(0, 4)
 
-        # Generate marks
-        n=0
-        for i in range(self.roomsh):
-            for j in range(self.roomsv):
-                if i==0 or i==self.roomsh-1 or j==0 or j==self.roomsv-1:
+            # Generate marks
+            n=0
+            for i in range(self.roomsh):
+                for j in range(self.roomsv):
                     n_shape = self.marks[n]//5
                     n_color = self.marks[n]%5
-                    n+=1
-                    self.place_shape(
-                        PATTERNS[patterns[n_shape]][:self.roomsize,:self.roomsize],
-                        (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
-                        IDX_TO_COLOR[n_color]
-                    )
-                    
+                    if i==0:
+                        n+=1
+                        self.place_shape(
+                            PATTERNS[patterns[n_shape]][:self.roomsize-2,:self.roomsize],
+                            (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
+                            IDX_TO_COLOR[n_color]
+                        )
+                    elif i==self.roomsh-1:
+                        n+=1
+                        self.place_shape(
+                            np.vstack((np.zeros((2,self.roomsize)),
+                                       PATTERNS[patterns[n_shape]][:self.roomsize-2,:self.roomsize])
+                                       ),
+                            (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
+                            IDX_TO_COLOR[n_color]
+                            )
+                    elif j==0:
+                        n+=1
+                        self.place_shape(
+                            PATTERNS[patterns[n_shape]][:self.roomsize-2,:self.roomsize].T,
+                            (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
+                            IDX_TO_COLOR[n_color]
+                            )
+                    elif j==self.roomsv-1:
+                        n+=1
+                        self.place_shape(
+                            np.hstack((np.zeros((self.roomsize,2)),
+                                       PATTERNS[patterns[n_shape]][:self.roomsize-2,:self.roomsize].T)),
+                            (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
+                            IDX_TO_COLOR[n_color]
+                            )
 
-        # Place the agent in the top-left corner
-        # self.place_agent()
+            # Colorize the rest of the floor
+            # n = 0
+            # for i in range(self.width):
+            #     for j in range(self.height):
+            #         if self.grid.get(i,j) is not None:
+            #             continue
+            #         else:
+            #             self.grid.set(i, j, FloorCustom(floor_colors[n]))
+            #             n+=1
 
-        self.mission = (
-            "avoid the real lava and get to the fake lava square"
-        )
+                        
+
+            # Place the agent in the top-left corner
+            # self.place_agent()
+
+            self.mission = (
+                "avoid the real lava and get to the fake lava square"
+            )
+            self.regenerate=False
+        else:
+
+            # Place the agent
+            if self.targetstart:
+                self.agent_pos = (-1, -1)
+                pos = self.place_obj(None, reject_fn=reject_nontarget_rooms)
+                self.agent_pos = pos
+                self.agent_dir = self._rand_int(0, 4)
+
+            else:
+                self.agent_pos = (-1, -1)
+                pos = self.place_obj(None, reject_fn=reject_nonmarked_rooms)
+                self.agent_pos = pos
+                self.agent_dir = self._rand_int(0, 4)
+
     
     def step(self, action):
         

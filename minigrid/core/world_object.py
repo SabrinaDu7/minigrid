@@ -146,6 +146,27 @@ class Floor(WorldObj):
         fill_coords(img, point_in_rect(0.031, 1, 0.031, 1), color)
 
 
+class FloorCustom(WorldObj):
+    """
+    Colored floor tile the agent can walk over
+    """
+
+    def __init__(self, color: np.ndarray = np.array([0,0,0])):
+        super().__init__("floor", 'blue')
+        self.color = color
+
+    def can_overlap(self):
+        return True
+
+    def render(self, img):
+        # Give the floor a pale color
+        color = self.color
+        fill_coords(img, point_in_rect(0.031, 1, 0.031, 1), color)
+
+    def encode(self):
+        return (OBJECT_TO_IDX[self.type], self.color.mean()+10, 0)
+
+
 class Lava(WorldObj):
     def __init__(self):
         super().__init__("lava", "red")
@@ -201,6 +222,18 @@ class Wall(WorldObj):
 
     def render(self, img):
         fill_coords(img, point_in_rect(0, 1, 0, 1), COLORS[self.color])
+
+
+class WallCustom(WorldObj):
+    def __init__(self, color: str = "grey", add: np.ndarray = np.array([0,0,0])):
+        super().__init__("wall", color)
+        self.add = add
+
+    def see_behind(self):
+        return False
+
+    def render(self, img):
+        fill_coords(img, point_in_rect(0, 1, 0, 1), COLORS[self.color]+self.add)
 
 
 class Gates(WorldObj):
