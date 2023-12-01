@@ -100,6 +100,7 @@ class FakeLavaEnv(MiniGridEnv):
         roomsh=4,
         nlava=None,
         target_start=False,
+        gates=True,
         neg=0,
         seed=8,
         max_steps: int | None = None,
@@ -111,6 +112,7 @@ class FakeLavaEnv(MiniGridEnv):
         self.roomsh = roomsh
         self.nlava = nlava
         self.targetstart = target_start
+        self.gates = gates
         self.neg = neg
 
 
@@ -176,20 +178,21 @@ class FakeLavaEnv(MiniGridEnv):
             self.grid.set(1,1,WallCustom(add=wall_colors[1]))
 
             # Generate gates
-            for i in range(self.roomsh-2):
-                for j in range(self.roomsv-2):
-                    self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize-1, Gates())
-                    self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize, Gates())
-                    self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize+1, Gates())
-                    self.grid.set((i+2)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize-1, Gates())
-                    self.grid.set((i+2)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize, Gates())
-                    self.grid.set((i+2)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize+1, Gates())
-                    self.grid.set((i+1)*(self.roomsize+1)+self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
-                    self.grid.set((i+1)*(self.roomsize+1)+self.halfsize, (j+1)*(self.roomsize+1), Gates())
-                    self.grid.set((i+1)*(self.roomsize+1)+self.halfsize+1, (j+1)*(self.roomsize+1), Gates())
-                    self.grid.set((i+1)*(self.roomsize+1)+self.halfsize-1, (j+2)*(self.roomsize+1), Gates())
-                    self.grid.set((i+1)*(self.roomsize+1)+self.halfsize, (j+2)*(self.roomsize+1), Gates())
-                    self.grid.set((i+1)*(self.roomsize+1)+self.halfsize+1, (j+2)*(self.roomsize+1), Gates())
+            if self.gates:
+                for i in range(self.roomsh-2):
+                    for j in range(self.roomsv-2):
+                        self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize-1, Gates())
+                        self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize, Gates())
+                        self.grid.set((i+1)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize+1, Gates())
+                        self.grid.set((i+2)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize-1, Gates())
+                        self.grid.set((i+2)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize, Gates())
+                        self.grid.set((i+2)*(self.roomsize+1), (j+1)*(self.roomsize+1)+self.halfsize+1, Gates())
+                        self.grid.set((i+1)*(self.roomsize+1)+self.halfsize-1, (j+1)*(self.roomsize+1), Gates())
+                        self.grid.set((i+1)*(self.roomsize+1)+self.halfsize, (j+1)*(self.roomsize+1), Gates())
+                        self.grid.set((i+1)*(self.roomsize+1)+self.halfsize+1, (j+1)*(self.roomsize+1), Gates())
+                        self.grid.set((i+1)*(self.roomsize+1)+self.halfsize-1, (j+2)*(self.roomsize+1), Gates())
+                        self.grid.set((i+1)*(self.roomsize+1)+self.halfsize, (j+2)*(self.roomsize+1), Gates())
+                        self.grid.set((i+1)*(self.roomsize+1)+self.halfsize+1, (j+2)*(self.roomsize+1), Gates())
             # for i in range(self.roomsh-1):
             #     self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize, Gates())
             #     self.grid.set((i+1)*(self.roomsize+1), height-self.halfsize-1, Gates())
