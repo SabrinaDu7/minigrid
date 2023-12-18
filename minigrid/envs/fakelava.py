@@ -236,42 +236,72 @@ class FakeLavaEnv(MiniGridEnv):
                 self.agent_dir = self._rand_int(0, 4)
 
             # Generate marks
-            n=0
-            for i in range(self.roomsh):
-                for j in range(self.roomsv):
-                    n_shape = self.marks[n]//5
-                    n_color = self.marks[n]%5
-                    if i==0:
-                        n+=1
-                        self.place_shape(
-                            PATTERNS[patterns[n_shape]][:self.roomsize-2,:self.roomsize],
-                            (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
-                            IDX_TO_COLOR[n_color]
-                        )
-                    elif i==self.roomsh-1:
-                        n+=1
-                        self.place_shape(
-                            np.vstack((np.zeros((2,self.roomsize)),
-                                       PATTERNS[patterns[n_shape]][:self.roomsize-2,:self.roomsize])
-                                       ),
-                            (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
-                            IDX_TO_COLOR[n_color]
-                            )
-                    elif j==0:
-                        n+=1
-                        self.place_shape(
-                            PATTERNS[patterns[n_shape]][:self.roomsize-2,:self.roomsize].T,
-                            (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
-                            IDX_TO_COLOR[n_color]
-                            )
-                    elif j==self.roomsv-1:
-                        n+=1
-                        self.place_shape(
-                            np.hstack((np.zeros((self.roomsize,2)),
-                                       PATTERNS[patterns[n_shape]][:self.roomsize-2,:self.roomsize].T)),
-                            (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
-                            IDX_TO_COLOR[n_color]
-                            )
+            for y in range(1,5):
+                self.put_obj(Floor('blue'), 1, y)
+            for y in range(1,6):
+                self.put_obj(Floor('blue'), 2, y)
+            for y in range(1,7):
+                self.put_obj(Floor('blue'), 3, y)
+            for y in range(self.height-5,self.height-2):
+                self.put_obj(Floor('yellow'), 2, y)
+            for y in range(self.height-10,self.height-6):
+                self.put_obj(Floor('yellow'), 3, y)
+            for x in range(self.width-self.roomsize-6,self.width-self.roomsize-1):
+                self.put_obj(Floor('yellow'), x, 1)
+            for x in range(self.width-self.roomsize-6,self.width-self.roomsize-1):
+                self.put_obj(Floor('yellow'), x, 2)
+            for x in range(self.width-self.roomsize-6,self.width-self.roomsize-1):
+                self.put_obj(Floor('yellow'), x, 3)
+            for x in range(self.width-4,self.width-1):
+                self.put_obj(Floor('red'), x, self.roomsize+2)
+            for x in range(self.width-4,self.width-1):
+                self.put_obj(Floor('red'), x, self.roomsize+3)
+            for x in range(self.width-self.roomsize-10,self.width-self.roomsize-5):
+                self.put_obj(Floor('red'), x, self.height-3)
+            for x in range(self.width-self.roomsize-10,self.width-self.roomsize-5):
+                self.put_obj(Floor('red'), x, self.height-4)
+            for x in range(self.width-self.roomsize-10,self.width-self.roomsize-5):
+                self.put_obj(Floor('red'), x, self.height-5)
+            for x in range(self.width-5,self.width-2):
+                for y in range(self.height-5,self.height-2):
+                    self.put_obj(Floor('blue'), x, y)
+                
+            # n=0
+            # for i in range(self.roomsh):
+            #     for j in range(self.roomsv):
+            #         n_shape = self.marks[n]//5
+            #         n_color = self.marks[n]%5
+            #         if i==0:
+            #             n+=1
+            #             self.place_shape(
+            #                 PATTERNS[patterns[n_shape]][:self.roomsize-2,:self.roomsize],
+            #                 (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
+            #                 IDX_TO_COLOR[n_color]
+            #             )
+            #         elif i==self.roomsh-1:
+            #             n+=1
+            #             self.place_shape(
+            #                 np.vstack((np.zeros((2,self.roomsize)),
+            #                            PATTERNS[patterns[n_shape]][:self.roomsize-2,:self.roomsize])
+            #                            ),
+            #                 (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
+            #                 IDX_TO_COLOR[n_color]
+            #                 )
+            #         elif j==0:
+            #             n+=1
+            #             self.place_shape(
+            #                 PATTERNS[patterns[n_shape]][:self.roomsize-2,:self.roomsize].T,
+            #                 (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
+            #                 IDX_TO_COLOR[n_color]
+            #                 )
+            #         elif j==self.roomsv-1:
+            #             n+=1
+            #             self.place_shape(
+            #                 np.hstack((np.zeros((self.roomsize,2)),
+            #                            PATTERNS[patterns[n_shape]][:self.roomsize-2,:self.roomsize].T)),
+            #                 (i*(self.roomsize+1)+1, j*(self.roomsize+1)+1),
+            #                 IDX_TO_COLOR[n_color]
+            #                 )
 
             # Colorize the rest of the floor
             # n = 0
