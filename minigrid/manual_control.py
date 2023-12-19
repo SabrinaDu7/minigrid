@@ -87,7 +87,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--env", help="gym environment to load", default="minigrid:MiniGrid-FakeLava-5x5-3x4-v1"
+        "--env", help="gym environment to load", default="minigrid:MiniGrid-FakeLava-5x5-3x4-v0"
+        # "--env", help="gym environment to load", default="MiniGrid-DonutRoom-16x16-v0"
     )
     parser.add_argument(
         "--seed",

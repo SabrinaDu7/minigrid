@@ -84,6 +84,24 @@ def register_minigrid_envs():
         kwargs={"strip2_row": 5},
     )
 
+    # Donut
+
+    register(
+        id='MiniGrid-DonutRoom-16x16-v0',
+        entry_point='minigrid.envs:Donut_Env',
+        kwargs={"size": 16}
+    )
+
+    register(
+        id='MiniGrid-DonutRoom-20x20-v0',
+        entry_point='minigrid.envs:DonutEnv_20'
+    )
+
+    register(
+        id='MiniGrid-DonutRoom-18x18-v0',
+        entry_point='minigrid.envs:DonutEnv_18'
+    )
+
     # DoorKey
     # ----------------------------------------
 
@@ -1315,5 +1333,5 @@ def register_minigrid_envs():
     )
 
 
-__version__ = "1.1"
+__version__ = "1.1.1"
 register_minigrid_envs()
