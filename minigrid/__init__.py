@@ -88,18 +88,17 @@ def register_minigrid_envs():
 
     register(
         id='MiniGrid-DonutRoom-16x16-v0',
-        entry_point='minigrid.envs:Donut_Env',
-        kwargs={"size": 16}
+        entry_point='minigrid.envs:SquareDonutEnv_16'
     )
 
     register(
         id='MiniGrid-DonutRoom-20x20-v0',
-        entry_point='minigrid.envs:DonutEnv_20'
+        entry_point='minigrid.envs:SquareDonutEnv_20'
     )
 
     register(
         id='MiniGrid-DonutRoom-18x18-v0',
-        entry_point='minigrid.envs:DonutEnv_18'
+        entry_point='minigrid.envs:SquareDonutEnv_18'
     )
 
     # DoorKey
