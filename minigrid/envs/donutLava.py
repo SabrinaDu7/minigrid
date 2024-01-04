@@ -8,17 +8,22 @@ from minigrid.minigrid_env import MiniGridEnv
 from minigrid.core.constants import PATTERNS, IDX_TO_COLOR
 
 
-class Square_Donut_Env(MiniGridEnv):
+def reject_lava_rooms(env, pos):
     """
-    Empty grid environment, no obstacles, sparse reward
+    Function to filter out object positions that are in the lava rooms
     """
+    x, y = pos
+    marked = x <= env.roomsize or y <= env.roomsize or x>= (env.width - env.roomsize - 1) or y >= (env.height - env.roomsize - 1)
+    return (not marked)
+
+class Lava_Donut_Env(MiniGridEnv):
 
     def __init__(
         self,
         size=16,
         Lwidth=10, Lheight=8,
-        agent_start_pos=(1,1),
-        agent_start_dir=0,
+        agent_start_pos=None,
+        agent_start_dir=None,
         tri_color='blue',
         plus_color='red',
         x_color='yellow',
@@ -50,7 +55,7 @@ class Square_Donut_Env(MiniGridEnv):
 
     @staticmethod
     def _gen_mission():
-        return "just fool around buddy"
+        return "avoid the real lava and get to the fake lava square"
 
     def _gen_grid(self, width, height, regenerate=True):
         if regenerate:
@@ -66,22 +71,8 @@ class Square_Donut_Env(MiniGridEnv):
 
             offset=6
 
-            # x_diam = 8
-            x_diam = 7
+            x_diam = 8
             y_diam = 4
-
-            # for i in range(int(height/2)-y_diam,int(height/2)+y_diam):
-            for i in range(int(height/2)-3,int(height/2)+4):
-                self.grid.horz_wall(int(self.Lwidth/2), i, length=x_diam)
-            
-
-            
-            # Place the agent
-            if self.agent_start_pos is not None:
-                self.agent_pos = self.agent_start_pos
-                self.agent_dir = self.agent_start_dir
-            else:
-                self.place_agent()
                 
             #Place the shapes
             triloc  =   (width/3-4,height/3-4)
@@ -113,7 +104,20 @@ class Square_Donut_Env(MiniGridEnv):
             self.place_shape('plus', (width/3-1,height/3+6), self.plus_color)
             self.place_shape('plus', (width/3,height/3+6), self.plus_color)
 
-            self.mission = "get to the green goal square"
+            #Adding the central rooms
+            self.grid.horz_wall(int(self.Lwidth/2), int(height/2)-y_diam, length=x_diam)
+            self.grid.horz_wall(int(self.Lwidth/2), int(height/2)+y_diam, length=x_diam)
+            # self.grid.vert_wall(int(self.Lheight/2)-x_diam, int(width/2), length=y_diam)
+            # self.grid.vert_wall(int(self.Lheight/2)+x_diam, int(width/2), length=y_diam)
+
+            
+            # Place the agent
+            if self.agent_start_pos is not None:
+                self.agent_pos = self.agent_start_pos
+                self.agent_dir = self.agent_start_dir
+            else:
+                self.place_agent()
+
         else:
             # Place the agent
             if self.agent_start_pos is not None:
@@ -166,14 +170,14 @@ class Square_Donut_Env(MiniGridEnv):
         
 
 
-class SquareDonutEnv_16(Square_Donut_Env):
+class LavaDonutEnv_16(Lava_Donut_Env):
     def __init__(self, **kwargs):
         super().__init__(size=16, agent_start_pos=None, **kwargs)
 
-class SquareDonutEnv_18(Square_Donut_Env):
+class LavaDonutEnv_18(Lava_Donut_Env):
     def __init__(self, **kwargs):
         super().__init__(size=18, agent_start_pos=None, **kwargs)
 
-class SquareDonutEnv_20(Square_Donut_Env):
+class LavaDonutEnv_20(Lava_Donut_Env):
     def __init__(self, **kwargs):
         super().__init__(size=20, agent_start_pos=None, **kwargs)

@@ -101,6 +101,23 @@ def register_minigrid_envs():
         entry_point='minigrid.envs:SquareDonutEnv_18'
     )
 
+    # Donut Lava
+
+    register(
+        id='MiniGrid-DonutLava-16x16-v0',
+        entry_point='minigrid.envs:LavaDonutEnv_16'
+    )
+
+    register(
+        id='MiniGrid-DonutLava-20x20-v0',
+        entry_point='minigrid.envs:LavaDonutEnv_20'
+    )
+
+    register(
+        id='MiniGrid-DonutLava-18x18-v0',
+        entry_point='minigrid.envs:LavaDonutEnv_18'
+    )
+
     # DoorKey
     # ----------------------------------------
 
@@ -1332,5 +1349,5 @@ def register_minigrid_envs():
     )
 
 
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 register_minigrid_envs()
