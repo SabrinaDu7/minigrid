@@ -1,5 +1,6 @@
 import random
 import numpy as np
+from gymnasium import spaces
 
 from minigrid.core.grid import Grid
 from minigrid.core.mission import MissionSpace
@@ -52,6 +53,8 @@ class Lava_Donut_Env(MiniGridEnv):
             max_steps=max_steps,
             **kwargs
         )
+
+        self.action_space = spaces.Discrete(4)
 
 
     @staticmethod
