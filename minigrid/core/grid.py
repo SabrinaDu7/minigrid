@@ -309,7 +309,7 @@ class Grid:
                     continue
 
                 cell = self.get(i, j)
-                if cell and not cell.see_behind():
+                if cell and not cell.see_behind() and not (i,j)==agent_pos:
                     continue
 
                 mask[i + 1, j] = True
@@ -322,7 +322,7 @@ class Grid:
                     continue
 
                 cell = self.get(i, j)
-                if cell and not cell.see_behind():
+                if cell and not cell.see_behind() and not (i,j)==agent_pos:
                     continue
 
                 mask[i - 1, j] = True

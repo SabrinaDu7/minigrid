@@ -92,6 +92,11 @@ def register_minigrid_envs():
     )
 
     register(
+        id='MiniGrid-DonutRoom-17x17-v0',
+        entry_point='minigrid.envs:SquareDonutEnv_17'
+    )
+
+    register(
         id='MiniGrid-DonutRoom-20x20-v0',
         entry_point='minigrid.envs:SquareDonutEnv_20'
     )
@@ -1349,5 +1354,5 @@ def register_minigrid_envs():
     )
 
 
-__version__ = "1.1.2"
+__version__ = "1.1.3"
 register_minigrid_envs()

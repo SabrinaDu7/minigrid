@@ -170,6 +170,10 @@ class SquareDonutEnv_16(Square_Donut_Env):
     def __init__(self, **kwargs):
         super().__init__(size=16, agent_start_pos=None, **kwargs)
 
+class SquareDonutEnv_17(Square_Donut_Env):
+    def __init__(self, **kwargs):
+        super().__init__(size=17, agent_start_pos=None, **kwargs)
+
 class SquareDonutEnv_18(Square_Donut_Env):
     def __init__(self, **kwargs):
         super().__init__(size=18, agent_start_pos=None, **kwargs)
