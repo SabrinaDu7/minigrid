@@ -114,6 +114,53 @@ def register_minigrid_envs():
     )
 
     register(
+        id='MiniGrid-DonutLava-17x17-v0',
+        entry_point='minigrid.envs:LavaDonutEnv_17'
+    )
+
+    register(
+        id='MiniGrid-DonutLava-17x17-neg02-v0',
+        entry_point='minigrid.envs:LavaDonutEnv_17',
+        kwargs={"neg": 0.2}
+    )
+
+    register(
+        id='MiniGrid-DonutLava-17x17-neg021-v0',
+        entry_point='minigrid.envs:LavaDonutEnv_17',
+        kwargs={"neg": 0.21}
+    )
+
+    register(
+        id='MiniGrid-DonutLava-17x17-neg022-v0',
+        entry_point='minigrid.envs:LavaDonutEnv_17',
+        kwargs={"neg": 0.22}
+    )
+
+    register(
+        id='MiniGrid-DonutLava-17x17-neg023-v0',
+        entry_point='minigrid.envs:LavaDonutEnv_17',
+        kwargs={"neg": 0.23}
+    )
+
+    register(
+        id='MiniGrid-DonutLava-17x17-neg024-v0',
+        entry_point='minigrid.envs:LavaDonutEnv_17',
+        kwargs={"neg": 0.24}
+    )
+
+    register(
+        id='MiniGrid-DonutLava-17x17-neg025-v0',
+        entry_point='minigrid.envs:LavaDonutEnv_17',
+        kwargs={"neg": 0.25}
+    )
+
+    register(
+        id='MiniGrid-DonutLava-17x17-neg03-v0',
+        entry_point='minigrid.envs:LavaDonutEnv_17',
+        kwargs={"neg": 0.3}
+    )
+
+    register(
         id='MiniGrid-DonutLava-20x20-v0',
         entry_point='minigrid.envs:LavaDonutEnv_20'
     )
@@ -1354,5 +1401,5 @@ def register_minigrid_envs():
     )
 
 
-__version__ = "1.1.3"
+__version__ = "1.2"
 register_minigrid_envs()

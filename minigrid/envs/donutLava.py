@@ -13,8 +13,8 @@ def reject_lava_rooms(env, pos):
     Function to filter out object positions that are in the lava rooms
     """
     x, y = pos
-    marked = x <= env.roomsize or y <= env.roomsize or x>= (env.width - env.roomsize - 1) or y >= (env.height - env.roomsize - 1)
-    return (not marked)
+    valid = x <= env.Lwidth/2 or y <= int(env.grid.height/2)-3 or x>= env.Lwidth/2 + 6 or y >= int(env.grid.height/2)+3
+    return (not valid)
 
 class Lava_Donut_Env(MiniGridEnv):
 
@@ -28,6 +28,8 @@ class Lava_Donut_Env(MiniGridEnv):
         plus_color='red',
         x_color='yellow',
         order = 'TPXD',
+        neg = 0,
+        max_steps=200,
         **kwargs
     ):
         self.agent_start_pos = agent_start_pos
@@ -40,13 +42,14 @@ class Lava_Donut_Env(MiniGridEnv):
         self.x_color = x_color
         self.shuffle_indices = [0,1,2]
         self.order = order
+        self.neg=neg
         
         mission_space = MissionSpace(mission_func=self._gen_mission)
         
         super().__init__(
             mission_space=mission_space,
             grid_size=size,
-            max_steps=10*size*size,
+            max_steps=max_steps,
             **kwargs
         )
 
@@ -123,7 +126,10 @@ class Lava_Donut_Env(MiniGridEnv):
                 self.agent_pos = self.agent_start_pos
                 self.agent_dir = self.agent_start_dir
             else:
-                self.place_agent()
+                self.agent_pos = (-1, -1)
+                pos = self.place_obj(None, reject_fn=reject_lava_rooms)
+                self.agent_pos = pos
+                self.agent_dir = self._rand_int(0, 4)
 
         else:
             # Place the agent
@@ -131,7 +137,68 @@ class Lava_Donut_Env(MiniGridEnv):
                 self.agent_pos = self.agent_start_pos
                 self.agent_dir = self.agent_start_dir
             else:
-                self.place_agent()
+                self.agent_pos = (-1, -1)
+                pos = self.place_obj(None, reject_fn=reject_lava_rooms)
+                self.agent_pos = pos
+                self.agent_dir = self._rand_int(0, 4)
+
+    
+    def step(self, action):
+        
+        self.step_count += 1
+
+        reward = 0
+        terminated = False
+        truncated = False
+
+        # Get the position in front of the agent
+        fwd_pos = self.front_pos
+
+        # Get the contents of the cell in front of the agent
+        fwd_cell = self.grid.get(*fwd_pos)
+
+        # Rotate left
+        if action == self.actions.left:
+            self.agent_dir -= 1
+            if self.agent_dir < 0:
+                self.agent_dir += 4
+
+        # Rotate right
+        elif action == self.actions.right:
+            self.agent_dir = (self.agent_dir + 1) % 4
+
+        # Move forward
+        elif action == self.actions.forward:
+            if fwd_cell is None or fwd_cell.can_overlap():
+                self.agent_pos = tuple(fwd_pos)
+            if fwd_cell is not None and (fwd_cell.type == "goal" or fwd_cell.type == "fake_lava"):
+                terminated = True
+                reward = self._reward()
+            if fwd_cell is not None and fwd_cell.type == "lava":
+                reward = -self.neg #* self._reward()
+                terminated = True
+            # Move forward again if it's a Gates
+            # if fwd_cell is Gates:
+            #     fwd_pos = self.front_pos
+            #     self.agent_pos = tuple(fwd_pos)
+
+
+        # Pass
+        elif action == self.actions.pickup:
+            pass
+
+        else:
+            raise ValueError(f"Unknown action: {action}")
+
+        if self.step_count >= self.max_steps:
+            truncated = True
+
+        if self.render_mode == "human":
+            self.render()
+
+        obs = self.gen_obs()
+
+        return obs, reward, terminated, truncated, {}
     
     
     def place_shape(self,shape,pos,color):
@@ -180,6 +247,10 @@ class Lava_Donut_Env(MiniGridEnv):
 class LavaDonutEnv_16(Lava_Donut_Env):
     def __init__(self, **kwargs):
         super().__init__(size=16, agent_start_pos=None, **kwargs)
+
+class LavaDonutEnv_17(Lava_Donut_Env):
+    def __init__(self, **kwargs):
+        super().__init__(size=17, agent_start_pos=None, **kwargs)
 
 class LavaDonutEnv_18(Lava_Donut_Env):
     def __init__(self, **kwargs):

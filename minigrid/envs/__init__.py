@@ -4,7 +4,7 @@ from minigrid.envs.blockedunlockpickup import BlockedUnlockPickupEnv
 from minigrid.envs.crossing import CrossingEnv
 from minigrid.envs.distshift import DistShiftEnv
 from minigrid.envs.donut import SquareDonutEnv_16, SquareDonutEnv_17, SquareDonutEnv_18, SquareDonutEnv_20
-from minigrid.envs.donutLava import LavaDonutEnv_16, LavaDonutEnv_18, LavaDonutEnv_20
+from minigrid.envs.donutLava import LavaDonutEnv_16, LavaDonutEnv_17, LavaDonutEnv_18, LavaDonutEnv_20
 from minigrid.envs.doorkey import DoorKeyEnv
 from minigrid.envs.dynamicobstacles import DynamicObstaclesEnv
 from minigrid.envs.empty import EmptyEnv
