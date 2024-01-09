@@ -88,7 +88,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         # "--env", help="gym environment to load", default="minigrid:MiniGrid-FakeLava-5x5-3x4-v0"
-        "--env", help="gym environment to load", default="MiniGrid-DonutLava-17x17-neg03-v0"
+        # "--env", help="gym environment to load", default="MiniGrid-DonutLava-17x17-neg03-v0"
+        "--env", help="gym environment to load", default="MiniGrid-DonutLava-Long-v0"
         # "--env", help="gym environment to load", default="MiniGrid-DonutRoom-17x17-v0"
     )
     parser.add_argument(
