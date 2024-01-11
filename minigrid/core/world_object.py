@@ -240,6 +240,7 @@ class Gates(WorldObj):
     def __init__(self, color: str = "blue"):
         super().__init__("door", color)
         self.is_open = False
+        self.is_locked = False
 
     def see_behind(self):
         return False
