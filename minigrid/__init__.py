@@ -147,6 +147,13 @@ def register_minigrid_envs():
         entry_point='minigrid.envs:Lava_Donut_Long_Env',
         kwargs={"neg": 0.5}
     )
+    
+    
+    register(
+        id='MiniGrid-DonutLava-Long-neg10-v0',
+        entry_point='minigrid.envs:Lava_Donut_Long_Env',
+        kwargs={"neg": 1.0}
+    )
 
 
 
@@ -1467,5 +1474,5 @@ def register_minigrid_envs():
     )
 
 
-__version__ = "1.2.4"
+__version__ = "1.2.5"
 register_minigrid_envs()
