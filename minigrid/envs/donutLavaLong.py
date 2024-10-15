@@ -14,7 +14,7 @@ def reject_lava_rooms(env, pos):
     Function to filter out object positions that are in the lava rooms
     """
     x, y = pos
-    valid = x <= env.Lwidth/2 or y <= int(env.grid.height/2)-2 or x>= env.Lwidth/2 + 8 or y >= int(env.grid.height/2)+2
+    valid = x <= int(env.width/2)-4 or y <= int(env.height/2)-2 or x>= int(env.width/2)+4 or y >= int(env.grid.height/2)+2
     return (not valid)
 
 class Lava_Donut_Long_Env(MiniGridEnv):
@@ -22,7 +22,6 @@ class Lava_Donut_Long_Env(MiniGridEnv):
     def __init__(
         self,
         size=17,
-        Lwidth=10, Lheight=8,
         agent_start_pos=None,
         agent_start_dir=None,
         tri_color='blue',
@@ -36,8 +35,8 @@ class Lava_Donut_Long_Env(MiniGridEnv):
         self.agent_start_pos = agent_start_pos
         self.agent_start_dir = agent_start_dir 
         
-        self.Lwidth = Lwidth
-        self.Lheight = Lheight
+        self.width = size+2
+        self.height = size-2
         self.tri_color = tri_color
         self.plus_color = plus_color
         self.x_color = x_color
@@ -49,8 +48,8 @@ class Lava_Donut_Long_Env(MiniGridEnv):
         
         super().__init__(
             mission_space=mission_space,
-            width=size+2,
-            height=size-2,
+            width=self.width,
+            height=self.height,
             max_steps=max_steps,
             **kwargs
         )
@@ -99,38 +98,37 @@ class Lava_Donut_Long_Env(MiniGridEnv):
             self.place_shape('plus', (width/3,height/3+4), self.plus_color)
 
             #Adding the central rooms
-            self.grid.horz_wall(int(self.Lwidth/2), int(height/2)-2, length=9)
-            self.grid.horz_wall(int(self.Lwidth/2), int(height/2)+2, length=9)
-            self.grid.vert_wall(int(self.Lwidth/2), int(height/2)-2, length=5)
-            self.grid.vert_wall(int(self.Lwidth/2)+4, int(height/2)-2, length=5)
-            self.grid.vert_wall(int(self.Lwidth/2)+8, int(height/2)-2, length=5)
+            self.grid.horz_wall(int(self.width/2)-4, int(height/2)-2, length=9)
+            self.grid.horz_wall(int(self.width/2)-4, int(height/2)+2, length=9)
+            self.grid.vert_wall(int(self.width/2)-4, int(height/2)-2, length=5)
+            self.grid.vert_wall(int(self.width/2), int(height/2)-2, length=5)
+            self.grid.vert_wall(int(self.width/2)+4, int(height/2)-2, length=5)
 
-            self.grid.set(int(self.Lwidth/2)+1, int(height/2)-2, Gates())
-            self.grid.set(int(self.Lwidth/2)+2, int(height/2)-2, Gates())
-            self.grid.set(int(self.Lwidth/2)+3, int(height/2)-2, Gates())
-            self.grid.set(int(self.Lwidth/2)+1, int(height/2)+2, Gates())
-            self.grid.set(int(self.Lwidth/2)+2, int(height/2)+2, Gates())
-            self.grid.set(int(self.Lwidth/2)+3, int(height/2)+2, Gates())
-            self.grid.set(int(self.Lwidth/2)+5, int(height/2)-2, Gates())
-            self.grid.set(int(self.Lwidth/2)+6, int(height/2)-2, Gates())
-            self.grid.set(int(self.Lwidth/2)+7, int(height/2)-2, Gates())
-            self.grid.set(int(self.Lwidth/2)+5, int(height/2)+2, Gates())
-            self.grid.set(int(self.Lwidth/2)+6, int(height/2)+2, Gates())
-            self.grid.set(int(self.Lwidth/2)+7, int(height/2)+2, Gates())
-            self.grid.set(int(self.Lwidth/2), int(height/2)-1, Gates())
-            self.grid.set(int(self.Lwidth/2), int(height/2), Gates())
-            self.grid.set(int(self.Lwidth/2), int(height/2)+1, Gates())
-            self.grid.set(int(self.Lwidth/2)+4, int(height/2)-1, Gates())
-            self.grid.set(int(self.Lwidth/2)+4, int(height/2), Gates())
-            self.grid.set(int(self.Lwidth/2)+4, int(height/2)+1, Gates())
-            self.grid.set(int(self.Lwidth/2)+8, int(height/2)-1, Gates())
-            self.grid.set(int(self.Lwidth/2)+8, int(height/2), Gates())
-            self.grid.set(int(self.Lwidth/2)+8, int(height/2)+1, Gates())
-
+            self.grid.set(int(self.width/2)+1, int(height/2)-2, Gates())
+            self.grid.set(int(self.width/2)+2, int(height/2)-2, Gates())
+            self.grid.set(int(self.width/2)+3, int(height/2)-2, Gates())
+            self.grid.set(int(self.width/2)+1, int(height/2)+2, Gates())
+            self.grid.set(int(self.width/2)+2, int(height/2)+2, Gates())
+            self.grid.set(int(self.width/2)+3, int(height/2)+2, Gates())
+            self.grid.set(int(self.width/2)-1, int(height/2)-2, Gates())
+            self.grid.set(int(self.width/2)-2, int(height/2)-2, Gates())
+            self.grid.set(int(self.width/2)-3, int(height/2)-2, Gates())
+            self.grid.set(int(self.width/2)-1, int(height/2)+2, Gates())
+            self.grid.set(int(self.width/2)-2, int(height/2)+2, Gates())
+            self.grid.set(int(self.width/2)-3, int(height/2)+2, Gates())
+            self.grid.set(int(self.width/2), int(height/2)-1, Gates())
+            self.grid.set(int(self.width/2), int(height/2), Gates())
+            self.grid.set(int(self.width/2), int(height/2)+1, Gates())
+            self.grid.set(int(self.width/2)+4, int(height/2)-1, Gates())
+            self.grid.set(int(self.width/2)+4, int(height/2), Gates())
+            self.grid.set(int(self.width/2)+4, int(height/2)+1, Gates())
+            self.grid.set(int(self.width/2)-4, int(height/2)-1, Gates())
+            self.grid.set(int(self.width/2)-4, int(height/2), Gates())
+            self.grid.set(int(self.width/2)-4, int(height/2)+1, Gates())
 
             # Place lava
-            self.put_obj(Fake_Lava(), int(self.Lwidth/2)+2, int(height/2))
-            self.put_obj(Lava(), int(self.Lwidth/2)+6, int(height/2))
+            self.put_obj(Fake_Lava(), int(self.width/2)-2, int(height/2))
+            self.put_obj(Lava(), int(self.width/2)+2, int(height/2))
             
             # Place the agent
             if self.agent_start_pos is not None:
