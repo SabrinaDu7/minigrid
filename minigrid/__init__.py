@@ -157,9 +157,30 @@ def register_minigrid_envs():
 
 
     register(
+        id='MiniGrid-DonutLava-Long-v1',
+        entry_point='minigrid.envs:Lava_Donut_Long_Env',
+        kwargs={"size": 19}
+    )
+
+
+    register(
         id='MiniGrid-DonutLava-Long-neg05-v1',
         entry_point='minigrid.envs:Lava_Donut_Long_Env',
         kwargs={"size": 19, "neg": 0.5}
+    )
+
+
+    register(
+        id='MiniGrid-DonutLava-Long-v2',
+        entry_point='minigrid.envs:Lava_Donut_Long_Env',
+        kwargs={"size": 21}
+    )
+
+
+    register(
+        id='MiniGrid-DonutLava-Long-neg05-v2',
+        entry_point='minigrid.envs:Lava_Donut_Long_Env',
+        kwargs={"size": 21, "neg": 0.5}
     )
 
 
