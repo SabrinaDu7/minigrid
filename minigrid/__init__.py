@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 from gymnasium.envs.registration import register
-
-from minigrid import minigrid_env, wrappers
-from minigrid.core import roomgrid
 from minigrid.core.world_object import Wall
 
+_REGISTERED = False
 
 def register_minigrid_envs():
+    global _REGISTERED
+    if _REGISTERED:
+        return
+    
     # BlockedUnlockPickup
     # ----------------------------------------
 
@@ -1500,6 +1502,8 @@ def register_minigrid_envs():
         id='MiniGrid-LRoom-18x18-v0',
         entry_point='minigrid.envs:LEnv_18'
     )
+    
+    _REGISTERED = True
 
 
 __version__ = "1.2.6"
