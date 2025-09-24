@@ -17,6 +17,7 @@ class L_Env(MiniGridEnv):
         Lwidth=10, Lheight=8,
         agent_start_pos=(1,1),
         agent_start_dir=0,
+        goal_pos = None,
         **kwargs
     ):
         self.agent_start_pos = agent_start_pos
@@ -24,6 +25,9 @@ class L_Env(MiniGridEnv):
         
         self.Lwidth = Lwidth
         self.Lheight = Lheight
+
+        self.goal_pos = goal_pos
+        self.goal_color = [ 76, 255,  76 ]
 
         mission_space = MissionSpace(mission_func=self._gen_mission)
         
@@ -117,6 +121,12 @@ class LEnv_18(L_Env):
     def __init__(self, **kwargs):
         super().__init__(size=18,Lwidth=10,Lheight=8,
                          agent_start_pos=None,**kwargs)
+
+class LEnv_18_goal(L_Env):
+    def __init__(self, **kwargs):
+        super().__init__(size=18, Lwidth=10,Lheight=8,
+                         agent_start_pos=None, goal_pos = [9,2],
+                         **kwargs)
 
 
 # register(
