@@ -67,7 +67,7 @@ def register_minigrid_envs():
 
     register(
         id="MiniGrid-SimpleCrossingS11N5-v0",
-        entry_point="gym_minigrid.envs:CrossingEnv",
+        entry_point="minigrid.envs:CrossingEnv",
         kwargs={"size": 11, "num_crossings": 5, "obstacle_type": Wall},
     )
 
@@ -1505,7 +1505,7 @@ def register_minigrid_envs():
 
     register(
         id='MiniGrid-LRoom_Goal-18x18-v0',
-        entry_point='gym_minigrid.envs:LEnv_18_goal'
+        entry_point='minigrid.envs:LEnv_18_goal'
     )
     
     _REGISTERED = True

@@ -1,7 +1,6 @@
 from minigrid.minigrid_env import *
 from minigrid.core.world_object import *
 from minigrid.core.mission import MissionSpace
-# from gym_minigrid.register import register
 import random
 import numpy as np
 
@@ -71,6 +70,11 @@ class L_Env(MiniGridEnv):
         self.place_shape('plus',plusloc,'red')
         self.place_shape('x',xloc,'yellow')
 
+        # Place the goal if specified
+        if self.goal_pos is not None:
+            x, y = self.goal_pos
+            self.put_obj(Goal(), x, y)
+
         self.mission = "get to the green goal square"
     
     
@@ -127,20 +131,4 @@ class LEnv_18_goal(L_Env):
         super().__init__(size=18, Lwidth=10,Lheight=8,
                          agent_start_pos=None, goal_pos = [9,2],
                          **kwargs)
-
-
-# register(
-#     id='MiniGrid-LRoom-16x16-v0',
-#     entry_point='gym_minigrid.envs:LEnv_16'
-# )
-
-# register(
-#     id='MiniGrid-LRoom-20x20-v0',
-#     entry_point='gym_minigrid.envs:LEnv_20'
-# )
-
-# register(
-#     id='MiniGrid-LRoom-18x18-v0',
-#     entry_point='gym_minigrid.envs:LEnv_18'
-# )
 
