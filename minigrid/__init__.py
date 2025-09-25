@@ -1504,6 +1504,11 @@ def register_minigrid_envs():
     )
 
     register(
+        id='MiniGrid-LRoom_Goal-16x16-v0',
+        entry_point='minigrid.envs:LEnv_16_goal'
+    )
+
+    register(
         id='MiniGrid-LRoom_Goal-18x18-v0',
         entry_point='minigrid.envs:LEnv_18_goal'
     )

@@ -115,7 +115,7 @@ class L_Env(MiniGridEnv):
 
 class LEnv_16(L_Env):
     def __init__(self, **kwargs):
-        super().__init__(size=16, agent_start_pos=None,**kwargs)
+        super().__init__(size=16, agent_start_pos=None, **kwargs)
         
 class LEnv_20(L_Env):
     def __init__(self, **kwargs):
@@ -126,9 +126,15 @@ class LEnv_18(L_Env):
         super().__init__(size=18,Lwidth=10,Lheight=8,
                          agent_start_pos=None,**kwargs)
 
+class LEnv_16_goal(L_Env):
+    def __init__(self, **kwargs):
+        super().__init__(size=16, Lwidth=8, Lheight=6,
+                         agent_start_pos=None, goal_pos = [7,2],
+                         **kwargs)
+
 class LEnv_18_goal(L_Env):
     def __init__(self, **kwargs):
-        super().__init__(size=18, Lwidth=10,Lheight=8,
+        super().__init__(size=18, Lwidth=10, Lheight=8,
                          agent_start_pos=None, goal_pos = [9,2],
                          **kwargs)
 
