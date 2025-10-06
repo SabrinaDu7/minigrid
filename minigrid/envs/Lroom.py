@@ -29,14 +29,16 @@ class L_Env(MiniGridEnv):
         self.goal_color = [ 76, 255,  76 ]
 
         mission_space = MissionSpace(mission_func=self._gen_mission)
+        max_steps = kwargs.pop("max_steps", 10 * size * size)
         
         super().__init__(
             mission_space=mission_space,
             grid_size=size,
-            max_steps=10*size*size,
-            # Set this to True for maximum speed
-            see_through_walls=True
+            max_steps=max_steps,
+            see_through_walls=True,
+            **kwargs
         )
+        self.action_space = spaces.Discrete(4)
 
     @staticmethod
     def _gen_mission():
@@ -119,17 +121,18 @@ class LEnv_16(L_Env):
         
 class LEnv_20(L_Env):
     def __init__(self, **kwargs):
-        super().__init__(size=20,Lwidth=12,Lheight=10,**kwargs)
+        super().__init__(size=20, Lwidth=12, Lheight=10,
+                         agent_start_pos=None, **kwargs)
         
 class LEnv_18(L_Env):
     def __init__(self, **kwargs):
-        super().__init__(size=18,Lwidth=10,Lheight=8,
-                         agent_start_pos=None,**kwargs)
+        super().__init__(size=18, Lwidth=10, Lheight=8,
+                         agent_start_pos=None, **kwargs)
 
 class LEnv_16_goal(L_Env):
     def __init__(self, **kwargs):
         super().__init__(size=16, Lwidth=8, Lheight=6,
-                         agent_start_pos=None, goal_pos = [7,2],
+                         agent_start_pos=None, goal_pos=[7, 2],
                          **kwargs)
 
 class LEnv_18_goal(L_Env):
