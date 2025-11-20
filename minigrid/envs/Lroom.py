@@ -26,7 +26,7 @@ class L_Env(MiniGridEnv):
         self.Lheight = Lheight
 
         self.goal_pos = goal_pos
-        self.goal_color = [ 76, 255,  76 ]
+        self.goal_color = "green"
 
         mission_space = MissionSpace(mission_func=self._gen_mission)
         max_steps = kwargs.pop("max_steps", 10 * size * size)
@@ -75,7 +75,7 @@ class L_Env(MiniGridEnv):
         # Place the goal if specified
         if self.goal_pos is not None:
             x, y = self.goal_pos
-            self.put_obj(Goal(), x, y)
+            self.put_obj(Floor(self.goal_color), x, y)
 
         self.mission = "get to the green goal square"
     
