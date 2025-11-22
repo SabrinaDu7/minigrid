@@ -17,11 +17,12 @@ class L_Env(MiniGridEnv):
         agent_start_pos=(1,1),
         agent_start_dir=0,
         goal_pos = None,
+        plus_new_color: str = "red",
         **kwargs
     ):
         self.agent_start_pos = agent_start_pos
         self.agent_start_dir = agent_start_dir 
-        
+        self.plus_new_color = plus_new_color
         self.Lwidth = Lwidth
         self.Lheight = Lheight
 
@@ -69,7 +70,7 @@ class L_Env(MiniGridEnv):
         plusloc =   (2*width/3-2,height/3-4)
         xloc    =   (width/3-3,2*height/3-2)
         self.place_shape('triangle',triloc,'blue')
-        self.place_shape('plus',plusloc,'red')
+        self.place_shape('plus',plusloc, self.plus_new_color)
         self.place_shape('x',xloc,'yellow')
 
         # Place the goal if specified
@@ -139,5 +140,11 @@ class LEnv_18_goal(L_Env):
     def __init__(self, **kwargs):
         super().__init__(size=18, Lwidth=10, Lheight=8,
                          agent_start_pos=None, goal_pos = [9,2],
+                         **kwargs)
+
+class LEnv_16_plus_green(L_Env):
+    def __init__(self, **kwargs):
+        super().__init__(size=16, Lwidth=8, Lheight=6,
+                         agent_start_pos=None, plus_new_color="green",
                          **kwargs)
 
