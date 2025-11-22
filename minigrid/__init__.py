@@ -1512,6 +1512,11 @@ def register_minigrid_envs():
         id='MiniGrid-LRoom_Goal-18x18-v0',
         entry_point='minigrid.envs:LEnv_18_goal'
     )
+
+    register(
+        id='MiniGrid-LRoom_PlusGreen-16x16-v0',
+        entry_point='minigrid.envs:LEnv_16_plus_green'
+    )
     
     _REGISTERED = True
 
