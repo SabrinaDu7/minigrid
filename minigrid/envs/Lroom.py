@@ -74,11 +74,11 @@ class L_Env(MiniGridEnv):
         self.place_shape('x',xloc,'yellow')
 
         # Place the goal if specified
+        self.mission = None
         if self.goal_pos is not None:
             x, y = self.goal_pos
             self.put_obj(Floor(self.goal_color), x, y)
-
-        self.mission = "get to the green goal square"
+            self.mission = "get to the green goal square"
     
     
     def place_shape(self,shape,pos,color):
@@ -106,7 +106,7 @@ class L_Env(MiniGridEnv):
                  [0,1,1,1,1,0],
                  [0,1,1,1,1,0],
                  [1,1,1,1,1,1],
-                 [1,1,0,0,1,1]])
+                 [1,1,0,0,1,1]]),
             }
             
         shapecoords = np.transpose(np.nonzero(shapegrid[shape]))+np.array(pos,dtype='int32')
@@ -148,3 +148,18 @@ class LEnv_16_plus_green(L_Env):
                          agent_start_pos=None, plus_new_color="green",
                          **kwargs)
 
+class LEnv_16_plus_green_line(L_Env):
+      def __init__(self, **kwargs):
+          super().__init__(size=16, Lwidth=8, Lheight=6,
+                           agent_start_pos=None,
+                           **kwargs)
+
+      def _gen_grid(self, width, height, regenerate=True):
+          # Let parent build the standard L-room grid
+          super()._gen_grid(width, height, regenerate)
+
+          # Add vertical green line between plus and triangle
+          line_x = 7  # midpoint between the two shapes
+          line_start_y = 1
+          for i in range(6):
+              self.put_obj(Floor("green"), line_x, line_start_y + i)
