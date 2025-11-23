@@ -74,11 +74,10 @@ class L_Env(MiniGridEnv):
         self.place_shape('x',xloc,'yellow')
 
         # Place the goal if specified
-        self.mission = None
+        self.mission = "get to the green goal square"
         if self.goal_pos is not None:
             x, y = self.goal_pos
             self.put_obj(Floor(self.goal_color), x, y)
-            self.mission = "get to the green goal square"
     
     
     def place_shape(self,shape,pos,color):
