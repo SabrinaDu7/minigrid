@@ -146,6 +146,22 @@ class Floor(WorldObj):
         fill_coords(img, point_in_rect(0.031, 1, 0.031, 1), color)
 
 
+class FloorBright(WorldObj):
+    """
+    Colored floor tile the agent can walk over
+    """
+
+    def __init__(self, color: str = "blue"):
+        super().__init__("floor", color)
+
+    def can_overlap(self):
+        return True
+
+    def render(self, img):
+        color = COLORS[self.color]
+        fill_coords(img, point_in_rect(0, 1, 0, 1), color)
+
+
 class FloorCustom(WorldObj):
     """
     Colored floor tile the agent can walk over

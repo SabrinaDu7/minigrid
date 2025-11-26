@@ -17,12 +17,12 @@ class L_Env(MiniGridEnv):
         agent_start_pos=(1,1),
         agent_start_dir=0,
         goal_pos = None,
-        plus_new_color: str = "red",
+        plus_color: str = "red",
         **kwargs
     ):
         self.agent_start_pos = agent_start_pos
         self.agent_start_dir = agent_start_dir 
-        self.plus_new_color = plus_new_color
+        self.plus_color = plus_color
         self.Lwidth = Lwidth
         self.Lheight = Lheight
 
@@ -70,14 +70,14 @@ class L_Env(MiniGridEnv):
         plusloc =   (2*width/3-2,height/3-4)
         xloc    =   (width/3-3,2*height/3-2)
         self.place_shape('triangle',triloc,'blue')
-        self.place_shape('plus',plusloc, self.plus_new_color)
+        self.place_shape('plus',plusloc, self.plus_color)
         self.place_shape('x',xloc,'yellow')
 
         # Place the goal if specified
-        self.mission = "get to the green goal square"
+        self.mission = f"get to the {self.goal_color} goal square"
         if self.goal_pos is not None:
             x, y = self.goal_pos
-            self.put_obj(Floor(self.goal_color), x, y)
+            self.put_obj(FloorBright(self.goal_color), x, y)
     
     
     def place_shape(self,shape,pos,color):
@@ -144,10 +144,10 @@ class LEnv_18_goal(L_Env):
 class LEnv_16_plus_green(L_Env):
     def __init__(self, **kwargs):
         super().__init__(size=16, Lwidth=8, Lheight=6,
-                         agent_start_pos=None, plus_new_color="green",
+                         agent_start_pos=None, plus_color="green",
                          **kwargs)
 
-class LEnv_16_plus_green_line(L_Env):
+class LEnv_16_green_line(L_Env):
       def __init__(self, **kwargs):
           super().__init__(size=16, Lwidth=8, Lheight=6,
                            agent_start_pos=None,
@@ -162,3 +162,43 @@ class LEnv_16_plus_green_line(L_Env):
           line_start_y = 1
           for i in range(6):
               self.put_obj(Floor("green"), line_x, line_start_y + i)
+
+class LEnv_16_extrinsic_goal(L_Env):
+    def __init__(self, **kwargs):
+        super().__init__(size=16, Lwidth=8, Lheight=6,
+                         agent_start_pos=None, goal_pos=[7, 2],
+                         **kwargs)
+        
+    def _gen_grid(self, width, height, regenerate=True):
+        # Create an empty grid
+        self.grid = Grid(width, height)
+        
+        # Generate the surrounding walls
+        #Consider: walls at -1, rather than 0
+        self.grid.horz_wall(0,0)
+        self.grid.vert_wall(0,0)
+        self.grid.horz_wall(0,height-1)
+        self.grid.vert_wall(width-1,0)
+        for i in range(self.Lheight+1,height-1):
+            self.grid.horz_wall(self.Lwidth+1, i, length=width-self.Lwidth-1)
+        
+        # Place the agent
+        if self.agent_start_pos is not None:
+            self.agent_pos = self.agent_start_pos
+            self.agent_dir = self.agent_start_dir
+        else:
+            self.place_agent()
+            
+        #Place the shapes
+        triloc  =   (width/3-4,height/3-4)
+        plusloc =   (2*width/3-2,height/3-4)
+        xloc    =   (width/3-3,2*height/3-2)
+        self.place_shape('triangle',triloc,'blue')
+        self.place_shape('plus',plusloc, self.plus_color)
+        self.place_shape('x',xloc,'yellow')
+
+        # Place the goal if specified
+        self.mission = f"get to the {self.goal_color} goal square"
+        if self.goal_pos is not None:
+            x, y = self.goal_pos
+            self.put_obj(Goal(), x, y)
