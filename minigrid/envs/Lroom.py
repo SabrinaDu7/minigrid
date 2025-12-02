@@ -159,9 +159,9 @@ class LEnv_16_green_line(L_Env):
 
           # Add vertical green line between plus and triangle
           line_x = 7  # midpoint between the two shapes
-          line_start_y = 1
-          for i in range(6):
-              self.put_obj(Floor("green"), line_x, line_start_y + i)
+          line_start_y = 2
+          for i in range(4):
+              self.put_obj(FloorBright("green"), line_x, line_start_y + i)
 
 class LEnv_16_extrinsic_goal(L_Env):
     def __init__(self, **kwargs):
