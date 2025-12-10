@@ -627,6 +627,11 @@ def register_minigrid_envs():
         kwargs={"goal_pos": (3,4), "door_poss": (4,3,4,3), "room_marks": True, 'visible': False},
     )
 
+    register(
+        id="MiniGrid-FourRooms-Objects-v0",
+        entry_point="minigrid.envs:FourRoomsObjs",
+    )
+
 
     # GoToDoor
     # ----------------------------------------

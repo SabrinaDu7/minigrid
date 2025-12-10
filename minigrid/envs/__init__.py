@@ -11,7 +11,7 @@ from minigrid.envs.dynamicobstacles import DynamicObstaclesEnv
 from minigrid.envs.empty import EmptyEnv
 from minigrid.envs.fakelava import FakeLavaEnv
 from minigrid.envs.fetch import FetchEnv
-from minigrid.envs.fourrooms import FourRoomsEnv
+from minigrid.envs.fourrooms import FourRoomsEnv, FourRoomsObjs
 from minigrid.envs.gotodoor import GoToDoorEnv
 from minigrid.envs.gotoobject import GoToObjectEnv
 from minigrid.envs.keycorridor import KeyCorridorEnv
