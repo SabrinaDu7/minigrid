@@ -1494,33 +1494,8 @@ def register_minigrid_envs():
     )
 
     register(
-        id='MiniGrid-LRoom-16x16-v0',
-        entry_point='minigrid.envs:LEnv_16'
-    )
-
-    register(
-        id='MiniGrid-LRoom-20x20-v0',
-        entry_point='minigrid.envs:LEnv_20'
-    )
-
-    register(
-        id='MiniGrid-LRoom-18x18-v0',
-        entry_point='minigrid.envs:LEnv_18'
-    )
-
-    register(
-        id='MiniGrid-LRoom_Goal-16x16-v0',
-        entry_point='minigrid.envs:LEnv_16_goal'
-    )
-
-    register(
-        id='MiniGrid-LRoom_Goal-18x18-v0',
-        entry_point='minigrid.envs:LEnv_18_goal'
-    )
-
-    register(
-        id='MiniGrid-LRoom_PlusGreen-16x16-v0',
-        entry_point='minigrid.envs:LEnv_16_plus_green'
+        id='MiniGrid-LRoom-v0',
+        entry_point='minigrid.envs:LEnv'
     )
 
     register(
@@ -1529,8 +1504,8 @@ def register_minigrid_envs():
     )
 
     register(
-        id='MiniGrid-LRoom_ExtrinsicGoal-16x16-v0',
-        entry_point='minigrid.envs:LEnv_16_extrinsic_goal'
+        id='MiniGrid-LRoom_Goal-v0',
+        entry_point='minigrid.envs:LEnv_goal'
     )
     
     _REGISTERED = True
