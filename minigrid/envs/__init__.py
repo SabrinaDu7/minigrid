@@ -17,7 +17,7 @@ from minigrid.envs.gotoobject import GoToObjectEnv
 from minigrid.envs.keycorridor import KeyCorridorEnv
 from minigrid.envs.lavagap import LavaGapEnv
 from minigrid.envs.lockedroom import LockedRoom, LockedRoomEnv
-from minigrid.envs.Lroom import LEnv, LEnv_16_green_line, LEnv_goal
+from minigrid.envs.Lroom import LEnv, LEnv_green_line, LEnv_goal
 from minigrid.envs.memory import MemoryEnv
 from minigrid.envs.multiroom import MultiRoom, MultiRoomEnv
 from minigrid.envs.obstructedmaze import (

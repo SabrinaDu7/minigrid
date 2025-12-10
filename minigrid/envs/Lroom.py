@@ -121,25 +121,32 @@ class LEnv(MiniGridEnv):
 # size=16, Lwidth=8, Lheight=6, goal_pos=[7, 2]
 # size=18, Lwidth=10, Lheight=8, goal_pos=[9, 2]
 
-class LEnv_16_green_line(LEnv):
-      def __init__(self, **kwargs):
-          super().__init__(size=16, Lwidth=8, Lheight=6,
-                           agent_start_pos=None,
-                           **kwargs)
+class LEnv_green_line(LEnv):
+      def __init__(self, 
+                 agent_start_pos: tuple | None, 
+                 size: int = 16, 
+                 Lwidth: int = 8,
+                 Lheight: int = 6,
+                 **kwargs):
+          
+           super().__init__(size=size, Lwidth=Lwidth, Lheight=Lheight,
+                         agent_start_pos=agent_start_pos,
+                         **kwargs)
 
       def _gen_grid(self, width, height, regenerate=True):
           # Let parent build the standard L-room grid
           super()._gen_grid(width, height, regenerate)
 
           # Add vertical green line between plus and triangle
-          line_x = 7  # midpoint between the two shapes
+          line_x = width // 2
           line_start_y = 2
           for i in range(4):
               self.put_obj(FloorBright("green"), line_x, line_start_y + i)
 
 
 class LEnv_goal(LEnv):
-    def __init__(self, agent_start_pos:tuple, 
+    def __init__(self, 
+                 agent_start_pos: tuple | None, 
                  size: int = 16, 
                  Lwidth: int = 8,
                  Lheight: int = 6,
