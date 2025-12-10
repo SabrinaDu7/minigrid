@@ -60,12 +60,13 @@ class FourRoomsEnv(MiniGridEnv):
 
     """
 
-    def __init__(self, open_all_paths: bool, subroom_size=8, agent_start_pos=None, goal_pos=None, max_steps=100, door_poss=None, room_marks=False, visible=True, **kwargs):
+    def __init__(self, open_all_paths: bool, subroom_size=8, agent_start_dir: int | None = None, agent_start_pos: tuple[int, int] | None = None, goal_pos=None, max_steps=100, door_poss=None, room_marks=False, visible=True, **kwargs):
 
         self._door_default_poss = door_poss
         self.room_marks = room_marks
         self.vis = visible
 
+        self.agent_start_dir = self._rand_int(0, 4) if agent_start_dir is None else agent_start_dir
         self.agent_start_pos = agent_start_pos
         self.goal_pos = goal_pos
 
@@ -173,13 +174,12 @@ class FourRoomsEnv(MiniGridEnv):
         if self.goal_pos is not None:
             self.goal_pos = self._validate_and_set_pos(self.goal_pos)
 
-        # Randomize the player start position and orientation
+        # Init the player start position and orientation
         if self.agent_start_pos is not None:
             i, j = self.agent_start_pos
             self.agent_pos = self.agent_start_pos
             self.grid.set(i=i, j=j, v=None)
-            # assuming random start direction
-            self.agent_dir = self._rand_int(0, 4)
+            self.agent_dir = self.agent_start_dir
         else:
             self.place_agent()
 
