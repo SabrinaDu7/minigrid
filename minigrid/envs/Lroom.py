@@ -138,8 +138,10 @@ class LEnv_green_line(LEnv):
           super()._gen_grid(width, height, regenerate)
 
           # Add vertical green line between plus and triangle
-          line_x = width // 2
+          line_x = (width - 2) // 2
           line_start_y = 2
+          self.new_obj_pos = (line_x, line_start_y)
+          
           for i in range(4):
               self.put_obj(FloorBright("green"), line_x, line_start_y + i)
 
