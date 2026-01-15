@@ -255,9 +255,6 @@ class FourRoomsObjs(FourRoomsEnv):
 
     def __init__(self, subroom_size=8, agent_start_pos=None, goal_pos=None, max_steps=None,
                  door_poss=None, room_marks=False, visible=True, open_all_paths=True, **kwargs):
-        
-        # Remove see_through_walls from kwargs to ensure it defaults to False
-        kwargs.pop('see_through_walls', None)
 
         if max_steps is None:
             max_steps = 4 * subroom_size * subroom_size
