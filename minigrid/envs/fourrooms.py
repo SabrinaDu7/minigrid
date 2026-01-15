@@ -79,6 +79,7 @@ class FourRoomsEnv(MiniGridEnv):
             width=self.size,
             height=self.size,
             max_steps=max_steps,
+            see_through_walls=True,
             **kwargs,
         )
         self.action_space = spaces.Discrete(4)
