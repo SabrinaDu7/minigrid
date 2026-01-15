@@ -71,6 +71,7 @@ class FourRoomsEnv(MiniGridEnv):
         self.goal_pos = goal_pos
 
         self.open_all_paths = open_all_paths
+        self.subroom_size = subroom_size
         self.size = subroom_size * 2 + 3
         mission_space = MissionSpace(mission_func=self._gen_mission)
 
@@ -107,6 +108,21 @@ class FourRoomsEnv(MiniGridEnv):
             print(f"Warning: {pos} is invalid. Randomizing position.")
             new_pos = None
         return new_pos
+
+    def get_agent_room(self) -> int:
+        """Returns which room (1-4) the agent is currently in.
+
+        Room layout:
+        1 (top-left)     | 2 (top-right)
+        -----------------+----------------
+        3 (bottom-left)  | 4 (bottom-right)
+        """
+        x, y = self.agent_pos
+
+        col = 0 if x <= self.subroom_size else 1
+        row = 0 if y <= self.subroom_size else 1
+
+        return row * 2 + col + 1
 
     def _gen_grid(self, width, height, regenerate=True):
         # Create the grid
