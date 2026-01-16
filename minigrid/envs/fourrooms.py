@@ -170,7 +170,9 @@ class FourRoomsEnv(MiniGridEnv):
                     else:
                         pos = (xR, self._rand_int(yT + 1, yB))
                         
-                    self.grid.set(*pos, None)
+                    # Skip door between rooms 2 (top right) and 1 (top left) if applicable
+                    if self.open_all_paths or not (i == 0 and j == 0):
+                        self.grid.set(*pos, None)
 
                 # Horizontal wall and door
                 if j + 1 < 2:
@@ -180,10 +182,9 @@ class FourRoomsEnv(MiniGridEnv):
                         pos = (xL +1 + self._door_default_poss[i+2], yB)
                     else:
                         pos = (self._rand_int(xL + 1, xR), yB)
+                    
+                    self.grid.set(*pos, None)
 
-                    # Skip door between rooms 2 (top right) and 4 (bottom right) if applicable
-                    if self.open_all_paths or not (i == 1 and j == 0):
-                        self.grid.set(*pos, None)
 
         # Validate positions now that grid is generated
         if self.agent_start_pos is not None:
